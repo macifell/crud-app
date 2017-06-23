@@ -12,4 +12,14 @@ public class ClientJdbcDao implements ClientDao {
         return null;
     }
 
+    @Override
+    public Integer createClient(Client client) {
+        return null;
+    }
+
+    @Override
+    public Client readClient(Integer clientId) {
+        return null;
+    }
+
 }

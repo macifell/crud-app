@@ -10,5 +10,9 @@ public interface ClientService {
     public void setClientDao(ClientDao clientDao);
 
     public List<Client> listAllClients();
+    
+    public Integer createClient(Client client);
+    
+    public Client readClient(Integer clientId);
 
 }

@@ -8,4 +8,8 @@ public interface ClientDao {
 
     public List<Client> listAllClients();
 
+    public Integer createClient(Client client);
+
+    public Client readClient(Integer clientId);
+
 }

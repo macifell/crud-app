@@ -1,29 +1,17 @@
 package com.aquent.crudapp.service;
 
+import static com.aquent.crudapp.data.dao.ClientDaoStubFactory.*;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
-import com.aquent.crudapp.data.dao.ClientDao;
 import com.aquent.crudapp.domain.Client;
 
 public class ClientServiceTest {
 
     private ClientService clientService;
-
-    private ClientDao createClientDaoStub(List<Client> responseList) {
-        return new ClientDao() {
-
-            @Override
-            public List<Client> listAllClients() {
-                return responseList;
-            }
-        };
-    }
 
     @Before
     public void setUp() {
@@ -31,12 +19,28 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void listClient_ReturnsDaoList() {
+    public void listAllClients_ReturnsDaoList() {
         List<Client> responseList = new ArrayList<>();
         responseList.add(new Client());
-        clientService.setClientDao(createClientDaoStub(responseList));
+        clientService.setClientDao(createListAllClientsStub(responseList));
 
         assertEquals(responseList, clientService.listAllClients());
+    }
+
+    @Test
+    public void createClient_ReturnsDaoClientId() {
+        Integer clientId = 0;
+        clientService.setClientDao(createCreateClientStub(clientId));
+
+        assertEquals(new Integer(clientId), clientService.createClient(new Client()));
+    }
+
+    @Test
+    public void readClient_ReturnsDaoRead() {
+        Client client = new Client();
+        clientService.setClientDao(createReadClientStub(client));
+
+        assertEquals(client, clientService.readClient(0));
     }
 
 }

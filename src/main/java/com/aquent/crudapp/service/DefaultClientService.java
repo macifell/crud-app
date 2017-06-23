@@ -18,4 +18,14 @@ public class DefaultClientService implements ClientService {
         return clientDao.listAllClients();
     }
 
+    @Override
+    public Integer createClient(Client client) {
+        return clientDao.createClient(client);
+    }
+
+    @Override
+    public Client readClient(Integer clientId) {
+        return clientDao.readClient(clientId);
+    }
+
 }
