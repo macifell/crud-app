@@ -28,4 +28,14 @@ public class DefaultClientService implements ClientService {
         return clientDao.readClient(clientId);
     }
 
+    @Override
+    public void updateClient(Client client) {
+        clientDao.updateClient(client);
+    }
+
+    @Override
+    public void deleteClient(Integer clientId) {
+        clientDao.deleteClient(clientId);
+    }
+
 }

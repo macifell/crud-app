@@ -1,11 +1,10 @@
-package com.aquent.crudapp.data.dao.jdbc;
+package com.aquent.crudapp.data.dao;
 
 import java.util.List;
 
-import com.aquent.crudapp.data.dao.ClientDao;
 import com.aquent.crudapp.domain.Client;
 
-public class ClientJdbcDao implements ClientDao {
+public class ClientDaoStub implements ClientDao {
 
     @Override
     public List<Client> listAllClients() {
@@ -23,13 +22,9 @@ public class ClientJdbcDao implements ClientDao {
     }
 
     @Override
-    public void updateClient(Client client) {
-        
-    }
+    public void updateClient(Client client) {}
 
     @Override
-    public void deleteClient(Integer clientId) {
-
-    }
+    public void deleteClient(Integer clientId) {}
 
 }

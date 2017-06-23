@@ -12,4 +12,8 @@ public interface ClientDao {
 
     public Client readClient(Integer clientId);
 
+    public void updateClient(Client client);
+
+    public void deleteClient(Integer clientId);
+
 }
