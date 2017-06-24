@@ -2,7 +2,7 @@ package com.aquent.crudapp.data.dao;
 
 import com.aquent.crudapp.domain.Client;
 
-public class ClientDaoSpy extends ClientDaoStub {
+public class ClientDaoSpy extends ClientDaoDummy {
 
     private int updateCallCount = 0;
     private int deleteCallCount = 0;

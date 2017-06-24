@@ -7,7 +7,7 @@ import com.aquent.crudapp.domain.Client;
 public class ClientDaoTestFactory {
 
     public static ClientDao makeListAllClientsStub(List<Client> responseList) {
-        return new ClientDaoStub() {
+        return new ClientDaoDummy() {
 
             @Override
             public List<Client> listAllClients() {
@@ -17,7 +17,7 @@ public class ClientDaoTestFactory {
     }
 
     public static ClientDao makeReadClientStub(Client client) {
-        return new ClientDaoStub() {
+        return new ClientDaoDummy() {
 
             @Override
             public Client readClient(Integer clientId) {
@@ -28,7 +28,7 @@ public class ClientDaoTestFactory {
     }
 
     public static ClientDao makeCreateClientStub(Integer clientId) {
-        return new ClientDaoStub() {
+        return new ClientDaoDummy() {
 
             @Override
             public Integer createClient(Client client) {

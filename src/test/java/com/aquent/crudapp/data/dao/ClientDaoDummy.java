@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.aquent.crudapp.domain.Client;
 
-public class ClientDaoStub implements ClientDao {
+public class ClientDaoDummy implements ClientDao {
 
     @Override
     public List<Client> listAllClients() {
