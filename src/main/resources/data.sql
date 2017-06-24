@@ -30,8 +30,13 @@ INSERT INTO client (
     phone_number,
     mailing_address
 ) VALUES (
-    'M',
-    'I',
+    'Brave Bananas',
+    'bb@bananas.yyz',
     '123-456-7890',
-    'K'
+    '1 Banana Lane'
+), (
+    'Adventurous Avacados',
+    'aa@avacados.yyz',
+    '123-456-7890',
+    '1 Avacado Place'
 );
