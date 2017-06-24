@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
+import javax.validation.*;
+
 import org.junit.*;
 
 import com.aquent.crudapp.data.dao.ClientDaoSpy;
@@ -13,6 +15,16 @@ import com.aquent.crudapp.domain.Client;
 public class ClientServiceTest {
 
     private ClientService clientService;
+
+    private Validator makeValidator() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        return factory.getValidator();
+    }
+
+    private void assertViolationCount(Client client, int expectedViolations) {
+        clientService.setValidator(makeValidator());
+        assertEquals(expectedViolations, clientService.validateClient(client).size());
+    }
 
     @Before
     public void setUp() {
@@ -64,6 +76,11 @@ public class ClientServiceTest {
 
         assertEquals(1, clientSpy.getDeleteCallCount());
         assertEquals(clientId, clientSpy.getLastDeleteClientId());
+    }
+
+    @Test
+    public void validateClient() {
+        assertViolationCount(new Client(), 1);
     }
 
 }
