@@ -16,6 +16,10 @@ public class ClientController {
 
     @Inject
     private ClientService clientService;
+    
+    public void setClientService(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ModelAndView list() {

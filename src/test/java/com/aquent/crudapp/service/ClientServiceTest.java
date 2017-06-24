@@ -1,13 +1,12 @@
 package com.aquent.crudapp.service;
 
 import static com.aquent.crudapp.data.dao.ClientDaoTestFactory.*;
+import static com.aquent.crudapp.testutil.ValidationTestTools.makeValidator;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.*;
 
 import java.util.*;
-
-import javax.validation.*;
 
 import org.junit.*;
 
@@ -23,14 +22,9 @@ public class ClientServiceTest {
     }
 
     private void assertViolations(Client client, String... expectedViolationMessages) {
-        clientService.setValidator(makeValidator());
         List<String> violationMessages = clientService.validateClient(client);
 
         assertThat(violationMessages, containsInAnyOrder(expectedViolationMessages));
-    }
-
-    private Validator makeValidator() {
-        return Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     private Client makeValidClientStub() {
@@ -47,6 +41,7 @@ public class ClientServiceTest {
     @Before
     public void setUp() {
         clientService = new DefaultClientService();
+        clientService.setValidator(makeValidator());
     }
 
     @Test
@@ -98,7 +93,6 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_ViolationsAreSorted() {
-        clientService.setValidator(makeValidator());
         List<String> violationMessages = clientService.validateClient(new Client());
         List<String> expectedOrder = new ArrayList<>();
 
