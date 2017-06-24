@@ -1,7 +1,7 @@
 package com.aquent.crudapp.service;
 
 import static com.aquent.crudapp.data.dao.ClientDaoTestFactory.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.*;
 
@@ -16,14 +16,36 @@ public class ClientServiceTest {
 
     private ClientService clientService;
 
-    private Validator makeValidator() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        return factory.getValidator();
+    private void assertNoViolations(Client client) {
+        assertViolations(client);
     }
 
-    private void assertViolationCount(Client client, int expectedViolations) {
+    private void assertViolations(Client client, String... expectedViolationMessages) {
         clientService.setValidator(makeValidator());
-        assertEquals(expectedViolations, clientService.validateClient(client).size());
+        List<String> violationMessages = clientService.validateClient(client);
+
+        for (String message : expectedViolationMessages) {
+            violationMessages.remove(message);
+        }
+
+        if (!violationMessages.isEmpty()) {
+            fail("Unexpected violation messages: " + violationMessages);
+        }
+    }
+
+    private Validator makeValidator() {
+        return Validation.buildDefaultValidatorFactory().getValidator();
+    }
+
+    private Client makeValidClientStub() {
+        Client validClient = new Client();
+        validClient.setClientId(1);
+        validClient.setCompanyName("name");
+        validClient.setWebsiteUri("uri");
+        validClient.setPhoneNumber("123-456-7890");
+        validClient.setMailingAddress("address");
+
+        return validClient;
     }
 
     @Before
@@ -79,8 +101,195 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void validateClient() {
-        assertViolationCount(new Client(), 1);
+    public void validateClient_FailsWithNullCompanyName() {
+        Client client = makeValidClientStub();
+        client.setCompanyName(null);
+
+        assertViolations(client, Client.COMPANY_NAME_NULL_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithEmptyCompanyName() {
+        Client client = makeValidClientStub();
+        client.setCompanyName("");
+
+        assertViolations(client, Client.COMPANY_NAME_LENGTH_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithTooLongCompanyName() {
+        Client client = makeValidClientStub();
+        client.setCompanyName(String.join("", Collections.nCopies(51, "x")));
+
+        assertViolations(client, Client.COMPANY_NAME_LENGTH_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidShortCompanyName() {
+        Client client = makeValidClientStub();
+        client.setCompanyName("x");
+
+        assertNoViolations(client);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidLongCompanyName() {
+        Client client = makeValidClientStub();
+        client.setCompanyName(String.join("", Collections.nCopies(50, "x")));
+
+        assertNoViolations(client);
+    }
+
+    @Test
+    public void validateClient_FailsWithNullWebsiteUri() {
+        Client client = makeValidClientStub();
+        client.setWebsiteUri(null);
+
+        assertViolations(client, Client.WEBSITE_URI_NULL_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithEmptyWebsiteUri() {
+        Client client = makeValidClientStub();
+        client.setWebsiteUri("");
+
+        assertViolations(client, Client.WEBSITE_URI_LENGTH_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithTooLongWebsiteUri() {
+        Client client = makeValidClientStub();
+        client.setWebsiteUri(String.join("", Collections.nCopies(51, "x")));
+
+        assertViolations(client, Client.WEBSITE_URI_LENGTH_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidShortWebsiteUri() {
+        Client client = makeValidClientStub();
+        client.setWebsiteUri("x");
+
+        assertNoViolations(client);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidLongWebsiteUri() {
+        Client client = makeValidClientStub();
+        client.setWebsiteUri(String.join("", Collections.nCopies(50, "x")));
+
+        assertNoViolations(client);
+    }
+
+    @Test
+    public void validateClient_FailsWithNullPhoneNumber() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber(null);
+
+        assertViolations(client, Client.PHONE_NUMBER_NULL_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithEmptyPhoneNumber() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber("");
+
+        assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithInvalidPhoneNumber_Letters() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber("zyx-wvu-tsrq");
+
+        assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithInvalidPhoneNumber_NoDelimiters() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber("1234567890");
+
+        assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithInvalidPhoneNumber_SpacesAfterDash() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber("123- 456-7890");
+
+        assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithInvalidPhoneNumber_SpacedBeforeEndingParenthesis() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber("(123 )456-7890");
+
+        assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidPhoneNumber_Parenthesis() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber("(123)456-7890");
+
+        assertNoViolations(client);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidPhoneNumber_ParenthesisAndSpace() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber("(123) 456-7890");
+
+        assertNoViolations(client);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidPhoneNumber_Dash() {
+        Client client = makeValidClientStub();
+        client.setPhoneNumber("123-456-7890");
+
+        assertNoViolations(client);
+    }
+
+    @Test
+    public void validateClient_FailsWithNullMailingAddress() {
+        Client client = makeValidClientStub();
+        client.setMailingAddress(null);
+
+        assertViolations(client, Client.MAILING_ADDRESS_NULL_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithEmptyMailingAddress() {
+        Client client = makeValidClientStub();
+        client.setMailingAddress("");
+
+        assertViolations(client, Client.MAILING_ADDRESS_LENGTH_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithTooLongMailingAddress() {
+        Client client = makeValidClientStub();
+        client.setMailingAddress(String.join("", Collections.nCopies(51, "x")));
+
+        assertViolations(client, Client.MAILING_ADDRESS_LENGTH_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidShortMailingAddress() {
+        Client client = makeValidClientStub();
+        client.setMailingAddress("x");
+
+        assertNoViolations(client);
+    }
+
+    @Test
+    public void validateClient_SucceedsWithValidLongMailingAddress() {
+        Client client = makeValidClientStub();
+        client.setMailingAddress(String.join("", Collections.nCopies(50, "x")));
+
+        assertNoViolations(client);
     }
 
 }
