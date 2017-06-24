@@ -23,3 +23,15 @@ INSERT INTO person (
     'NC',
     '28801'
 );
+
+INSERT INTO client (
+    company_name,
+    website_uri,
+    phone_number,
+    mailing_address
+) VALUES (
+    'M',
+    'I',
+    '123-456-7890',
+    'K'
+);
