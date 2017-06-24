@@ -24,7 +24,7 @@ public class Client {
     private String websiteUri;
 
     @NotNull(message = PHONE_NUMBER_NULL_MESSAGE)
-    @Pattern(regexp = "((\\(\\d{3}\\) ?)|(\\d{3}-))?\\d{3}-\\d{4}", message = PHONE_NUMBER_INVALID_MESSAGE)
+    @Pattern(regexp = "\\d{3}-\\d{3}-\\d{4}", message = PHONE_NUMBER_INVALID_MESSAGE)
     private String phoneNumber;
 
     @NotNull(message = MAILING_ADDRESS_NULL_MESSAGE)

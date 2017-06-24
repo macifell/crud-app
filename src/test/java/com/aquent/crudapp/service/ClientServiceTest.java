@@ -1,13 +1,14 @@
 package com.aquent.crudapp.service;
 
 import static com.aquent.crudapp.data.dao.ClientDaoTestFactory.*;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.*;
 
 import java.util.*;
 
 import javax.validation.*;
 
-import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.*;
 
 import com.aquent.crudapp.data.dao.ClientDaoSpy;
@@ -25,13 +26,7 @@ public class ClientServiceTest {
         clientService.setValidator(makeValidator());
         List<String> violationMessages = clientService.validateClient(client);
 
-        for (String message : expectedViolationMessages) {
-            violationMessages.remove(message);
-        }
-
-        if (!violationMessages.isEmpty()) {
-            fail("Unexpected violation messages: " + violationMessages);
-        }
+        assertThat(violationMessages, containsInAnyOrder(expectedViolationMessages));
     }
 
     private Validator makeValidator() {
@@ -112,7 +107,7 @@ public class ClientServiceTest {
         expectedOrder.add(Client.PHONE_NUMBER_NULL_MESSAGE);
         expectedOrder.add(Client.WEBSITE_URI_NULL_MESSAGE);
 
-        assertThat(violationMessages, IsIterableContainingInOrder.contains(expectedOrder.toArray()));
+        assertThat(violationMessages, contains(expectedOrder.toArray()));
     }
 
     @Test
@@ -236,31 +231,23 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void validateClient_FailsWithInvalidPhoneNumber_SpacedBeforeEndingParenthesis() {
+    public void validateClient_FailsWithInvalidPhoneNumber_Parenthesis() {
         Client client = makeValidClientStub();
-        client.setPhoneNumber("(123 )456-7890");
+        client.setPhoneNumber("(123) 456-7890");
 
         assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
     }
 
     @Test
-    public void validateClient_SucceedsWithValidPhoneNumber_Parenthesis() {
+    public void validateClient_FailsWithInvalidPhoneNumber_IncorrectNumberOfDigits() {
         Client client = makeValidClientStub();
-        client.setPhoneNumber("(123)456-7890");
+        client.setPhoneNumber("123-456-789");
 
-        assertNoViolations(client);
+        assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
     }
 
     @Test
-    public void validateClient_SucceedsWithValidPhoneNumber_ParenthesisAndSpace() {
-        Client client = makeValidClientStub();
-        client.setPhoneNumber("(123) 456-7890");
-
-        assertNoViolations(client);
-    }
-
-    @Test
-    public void validateClient_SucceedsWithValidPhoneNumber_Dash() {
+    public void validateClient_SucceedsWithValidPhoneNumber() {
         Client client = makeValidClientStub();
         client.setPhoneNumber("123-456-7890");
 
