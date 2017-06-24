@@ -11,7 +11,7 @@ import java.util.*;
 import org.junit.*;
 
 import com.aquent.crudapp.data.dao.ClientDaoSpy;
-import com.aquent.crudapp.domain.Client;
+import com.aquent.crudapp.domain.*;
 
 public class ClientServiceTest {
 
@@ -25,17 +25,6 @@ public class ClientServiceTest {
         List<String> violationMessages = clientService.validateClient(client);
 
         assertThat(violationMessages, containsInAnyOrder(expectedViolationMessages));
-    }
-
-    private Client makeValidClientStub() {
-        Client validClient = new Client();
-        validClient.setClientId(1);
-        validClient.setCompanyName("name");
-        validClient.setWebsiteUri("uri");
-        validClient.setPhoneNumber("123-456-7890");
-        validClient.setMailingAddress("address");
-
-        return validClient;
     }
 
     @Before
@@ -106,7 +95,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithNullCompanyName() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setCompanyName(null);
 
         assertViolations(client, Client.COMPANY_NAME_NULL_MESSAGE);
@@ -114,7 +103,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithEmptyCompanyName() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setCompanyName("");
 
         assertViolations(client, Client.COMPANY_NAME_LENGTH_MESSAGE);
@@ -122,7 +111,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithTooLongCompanyName() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setCompanyName(String.join("", Collections.nCopies(51, "x")));
 
         assertViolations(client, Client.COMPANY_NAME_LENGTH_MESSAGE);
@@ -130,7 +119,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_SucceedsWithValidShortCompanyName() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setCompanyName("x");
 
         assertNoViolations(client);
@@ -138,7 +127,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_SucceedsWithValidLongCompanyName() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setCompanyName(String.join("", Collections.nCopies(50, "x")));
 
         assertNoViolations(client);
@@ -146,7 +135,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithNullWebsiteUri() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setWebsiteUri(null);
 
         assertViolations(client, Client.WEBSITE_URI_NULL_MESSAGE);
@@ -154,7 +143,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithEmptyWebsiteUri() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setWebsiteUri("");
 
         assertViolations(client, Client.WEBSITE_URI_LENGTH_MESSAGE);
@@ -162,7 +151,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithTooLongWebsiteUri() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setWebsiteUri(String.join("", Collections.nCopies(51, "x")));
 
         assertViolations(client, Client.WEBSITE_URI_LENGTH_MESSAGE);
@@ -170,7 +159,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_SucceedsWithValidShortWebsiteUri() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setWebsiteUri("x");
 
         assertNoViolations(client);
@@ -178,7 +167,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_SucceedsWithValidLongWebsiteUri() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setWebsiteUri(String.join("", Collections.nCopies(50, "x")));
 
         assertNoViolations(client);
@@ -186,7 +175,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithNullPhoneNumber() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setPhoneNumber(null);
 
         assertViolations(client, Client.PHONE_NUMBER_NULL_MESSAGE);
@@ -194,7 +183,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithEmptyPhoneNumber() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setPhoneNumber("");
 
         assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
@@ -202,7 +191,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithInvalidPhoneNumber_Letters() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setPhoneNumber("zyx-wvu-tsrq");
 
         assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
@@ -210,7 +199,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithInvalidPhoneNumber_NoDelimiters() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setPhoneNumber("1234567890");
 
         assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
@@ -218,7 +207,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithInvalidPhoneNumber_SpacesAfterDash() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setPhoneNumber("123- 456-7890");
 
         assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
@@ -226,7 +215,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithInvalidPhoneNumber_Parenthesis() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setPhoneNumber("(123) 456-7890");
 
         assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
@@ -234,7 +223,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithInvalidPhoneNumber_IncorrectNumberOfDigits() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setPhoneNumber("123-456-789");
 
         assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
@@ -242,7 +231,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_SucceedsWithValidPhoneNumber() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setPhoneNumber("123-456-7890");
 
         assertNoViolations(client);
@@ -250,7 +239,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithNullMailingAddress() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setMailingAddress(null);
 
         assertViolations(client, Client.MAILING_ADDRESS_NULL_MESSAGE);
@@ -258,7 +247,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithEmptyMailingAddress() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setMailingAddress("");
 
         assertViolations(client, Client.MAILING_ADDRESS_LENGTH_MESSAGE);
@@ -266,7 +255,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_FailsWithTooLongMailingAddress() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setMailingAddress(String.join("", Collections.nCopies(51, "x")));
 
         assertViolations(client, Client.MAILING_ADDRESS_LENGTH_MESSAGE);
@@ -274,7 +263,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_SucceedsWithValidShortMailingAddress() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setMailingAddress("x");
 
         assertNoViolations(client);
@@ -282,7 +271,7 @@ public class ClientServiceTest {
 
     @Test
     public void validateClient_SucceedsWithValidLongMailingAddress() {
-        Client client = makeValidClientStub();
+        Client client = new ClientStub();
         client.setMailingAddress(String.join("", Collections.nCopies(50, "x")));
 
         assertNoViolations(client);
