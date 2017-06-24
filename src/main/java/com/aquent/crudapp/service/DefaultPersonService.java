@@ -1,15 +1,12 @@
 package com.aquent.crudapp.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import static com.aquent.crudapp.service.ViolationUtilities.extractViolationMessages;
 
-import javax.validation.ConstraintViolation;
+import java.util.List;
+
 import javax.validation.Validator;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.*;
 
 import com.aquent.crudapp.data.dao.PersonDao;
 import com.aquent.crudapp.domain.Person;
@@ -22,10 +19,12 @@ public class DefaultPersonService implements PersonService {
     private PersonDao personDao;
     private Validator validator;
 
+    @Override
     public void setPersonDao(PersonDao personDao) {
         this.personDao = personDao;
     }
 
+    @Override
     public void setValidator(Validator validator) {
         this.validator = validator;
     }
@@ -62,12 +61,6 @@ public class DefaultPersonService implements PersonService {
 
     @Override
     public List<String> validatePerson(Person person) {
-        Set<ConstraintViolation<Person>> violations = validator.validate(person);
-        List<String> errors = new ArrayList<String>(violations.size());
-        for (ConstraintViolation<Person> violation : violations) {
-            errors.add(violation.getMessage());
-        }
-        Collections.sort(errors);
-        return errors;
+        return extractViolationMessages(validator.validate(person));
     }
 }

@@ -1,8 +1,10 @@
 package com.aquent.crudapp.service;
 
-import java.util.*;
+import static com.aquent.crudapp.service.ViolationUtilities.extractViolationMessages;
 
-import javax.validation.*;
+import java.util.List;
+
+import javax.validation.Validator;
 
 import com.aquent.crudapp.data.dao.ClientDao;
 import com.aquent.crudapp.domain.Client;
@@ -49,14 +51,7 @@ public class DefaultClientService implements ClientService {
 
     @Override
     public List<String> validateClient(Client client) {
-        List<String> violationMessages = new ArrayList<>();
-        Set<ConstraintViolation<Client>> violations = validator.validate(client);
-
-        for (ConstraintViolation<Client> violation : violations) {
-            violationMessages.add(violation.getMessage());
-        }
-
-        return violationMessages;
+        return extractViolationMessages(validator.validate(client));
     }
 
 }

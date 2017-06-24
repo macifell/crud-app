@@ -2,12 +2,19 @@ package com.aquent.crudapp.service;
 
 import java.util.List;
 
+import javax.validation.Validator;
+
+import com.aquent.crudapp.data.dao.PersonDao;
 import com.aquent.crudapp.domain.Person;
 
 /**
  * Person operations.
  */
 public interface PersonService {
+
+    void setValidator(Validator validator);
+
+    void setPersonDao(PersonDao personDao);
 
     /**
      * Retrieves all of the person records.
@@ -19,7 +26,8 @@ public interface PersonService {
     /**
      * Creates a new person record.
      *
-     * @param person the values to save
+     * @param person
+     *            the values to save
      * @return the new person ID
      */
     Integer createPerson(Person person);
@@ -27,7 +35,8 @@ public interface PersonService {
     /**
      * Retrieves a person record by ID.
      *
-     * @param id the person ID
+     * @param id
+     *            the person ID
      * @return the person record
      */
     Person readPerson(Integer id);
@@ -35,22 +44,26 @@ public interface PersonService {
     /**
      * Updates an existing person record.
      *
-     * @param person the new values to save
+     * @param person
+     *            the new values to save
      */
     void updatePerson(Person person);
 
     /**
      * Deletes a person record by ID.
      *
-     * @param id the person ID
+     * @param id
+     *            the person ID
      */
     void deletePerson(Integer id);
 
     /**
      * Validates populated person data.
      *
-     * @param person the values to validate
+     * @param person
+     *            the values to validate
      * @return list of error messages
      */
     List<String> validatePerson(Person person);
+
 }

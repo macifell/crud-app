@@ -8,33 +8,41 @@ import javax.validation.constraints.Size;
  */
 public class Person {
 
+    public static final String FIRST_NAME_NULL_MESSAGE = "First name may not be null";
+    public static final String LAST_NAME_NULL_MESSAGE = "Last name may not be null";
+    public static final String EMAIL_ADDRESS_NULL_MESSAGE = "Email address may not be null";
+    public static final String STREET_ADDRESS_NULL_MESSAGE = "Street address may not be null";
+    public static final String CITY_NULL_MESSAGE = "City may not be null";
+    public static final String STATE_NULL_MESSAGE = "Sate may not be null";
+    public static final String ZIP_CODE_NULL_MESSAGE = "Zip code may not be null";
+
     private Integer personId;
 
-    @NotNull
+    @NotNull(message = FIRST_NAME_NULL_MESSAGE)
     @Size(min = 1, max = 50, message = "First name is required with maximum length of 50")
     private String firstName;
 
-    @NotNull
+    @NotNull(message = LAST_NAME_NULL_MESSAGE)
     @Size(min = 1, max = 50, message = "Last name is required with maximum length of 50")
     private String lastName;
 
-    @NotNull
+    @NotNull(message = EMAIL_ADDRESS_NULL_MESSAGE)
     @Size(min = 1, max = 50, message = "Email address is required with maximum length of 50")
     private String emailAddress;
 
-    @NotNull
+    @NotNull(message = STREET_ADDRESS_NULL_MESSAGE)
     @Size(min = 1, max = 50, message = "Street address is required with maximum length of 50")
     private String streetAddress;
 
-    @NotNull
+    @NotNull(message = CITY_NULL_MESSAGE)
     @Size(min = 1, max = 50, message = "City is required with maximum length of 50")
     private String city;
 
-    @NotNull
+    @NotNull(message = STATE_NULL_MESSAGE)
     @Size(min = 2, max = 2, message = "State is required with length 2")
     private String state;
 
-    @NotNull
+    @NotNull(message = ZIP_CODE_NULL_MESSAGE)
     @Size(min = 5, max = 5, message = "Zip code is required with length 5")
     private String zipCode;
 

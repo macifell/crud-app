@@ -7,6 +7,7 @@ import java.util.*;
 
 import javax.validation.*;
 
+import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.*;
 
 import com.aquent.crudapp.data.dao.ClientDaoSpy;
@@ -98,6 +99,20 @@ public class ClientServiceTest {
 
         assertEquals(1, clientSpy.getDeleteCallCount());
         assertEquals(clientId, clientSpy.getLastDeleteClientId());
+    }
+
+    @Test
+    public void validateClient_ViolationsAreSorted() {
+        clientService.setValidator(makeValidator());
+        List<String> violationMessages = clientService.validateClient(new Client());
+        List<String> expectedOrder = new ArrayList<>();
+
+        expectedOrder.add(Client.COMPANY_NAME_NULL_MESSAGE);
+        expectedOrder.add(Client.MAILING_ADDRESS_NULL_MESSAGE);
+        expectedOrder.add(Client.PHONE_NUMBER_NULL_MESSAGE);
+        expectedOrder.add(Client.WEBSITE_URI_NULL_MESSAGE);
+
+        assertThat(violationMessages, IsIterableContainingInOrder.contains(expectedOrder.toArray()));
     }
 
     @Test
