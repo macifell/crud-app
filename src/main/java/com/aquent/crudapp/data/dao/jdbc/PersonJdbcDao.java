@@ -67,7 +67,6 @@ public class PersonJdbcDao implements PersonDao {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = false)
     public void updatePerson(Person person) {
-        System.out.println("Updating" + person.getFirstName() + person.getClientId());
         namedParameterJdbcTemplate.update(SQL_UPDATE_PERSON, new BeanPropertySqlParameterSource(person));
     }
 

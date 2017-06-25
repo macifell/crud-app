@@ -1,5 +1,7 @@
 package com.aquent.crudapp.controller;
 
+import static java.util.Arrays.asList;
+
 import java.util.*;
 
 import javax.inject.Inject;
@@ -42,43 +44,60 @@ public class ClientController {
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public ModelAndView create() {
         ModelAndView mav = new ModelAndView("client/create");
-        mav.addObject("client", new Client());
-        mav.addObject("people", personService.listPeople());
+        mav.addObject("clientForm", makeClientForm(new Client(), asList()));
         mav.addObject("errors", new ArrayList<String>());
 
         return mav;
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public ModelAndView create(Client client) {
-        List<String> errors = clientService.validateClient(client);
+    public ModelAndView create(ClientForm clientForm) {
+        List<String> errors = clientService.validateClient(clientForm.getClient());
 
-        if (errors.isEmpty()) {
-            clientService.createClient(client);
+        if (errors.isEmpty())
+            return createClient(clientForm);
+        else
+            return displayCreationErrors(clientForm, errors);
+    }
 
-            return new ModelAndView("redirect:/client/list");
-        } else {
-            ModelAndView mav = new ModelAndView("client/create");
-            mav.addObject("client", client);
-            mav.addObject("people", personService.listPeople());
-            mav.addObject("errors", errors);
+    private ModelAndView createClient(ClientForm clientForm) {
+        Integer clientId = clientService.createClient(clientForm.getClient());
+        clientForm.setClientId(clientId);
+        updatePeopleWithClient(clientForm);
 
-            return mav;
-        }
+        return new ModelAndView("redirect:/client/list");
+    }
+
+    private ModelAndView displayCreationErrors(ClientForm clientForm, List<String> errors) {
+        ModelAndView mav = new ModelAndView("client/create");
+        mav.addObject("clientForm", reloadPeopleInForm(clientForm));
+        mav.addObject("errors", errors);
+
+        return mav;
+    }
+
+    private ClientForm reloadPeopleInForm(ClientForm clientForm) {
+        return makeClientForm(clientForm.getClient(), clientForm.getSelectedPersonIds());
     }
 
     @RequestMapping(value = "edit/{clientId}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable Integer clientId) {
         ModelAndView mav = new ModelAndView("client/edit");
-        ClientForm clientForm = new ClientForm();
-        clientForm.setClient(clientService.readClient(clientId));
-        clientForm.setPeople(personService.listPeople());
-        clientForm.setSelectedPersonIds(personService.listPersonIdsForClient(clientId));
+        Client client = clientService.readClient(clientId);
+        List<Integer> selectedPersonIds = personService.listPersonIdsForClient(clientId);
 
-        mav.addObject("clientForm", clientForm);
+        mav.addObject("clientForm", makeClientForm(client, selectedPersonIds));
         mav.addObject("errors", new ArrayList<String>());
 
         return mav;
+    }
+
+    private ClientForm makeClientForm(Client client, List<Integer> selectedPersonIds) {
+        ClientForm clientForm = new ClientForm();
+        clientForm.setClient(client);
+        clientForm.setPeople(personService.listPeople());
+        clientForm.setSelectedPersonIds(selectedPersonIds);
+        return clientForm;
     }
 
     @RequestMapping(value = "edit", method = RequestMethod.POST)
@@ -101,14 +120,17 @@ public class ClientController {
     private void updatePeopleWithClient(ClientForm clientForm) {
         for (Person person : personService.listPeople())
             if (isPersonLeavingClient(clientForm, person))
-                setClientForPerson(person, "");
+                clearClientForPerson(person);
             else if (isPersonJoiningClient(clientForm, person))
                 setClientForPerson(person, clientForm.getClientIdString());
     }
 
+    private void clearClientForPerson(Person person) {
+        setClientForPerson(person, "");
+    }
+
     private void setClientForPerson(Person person, String clientId) {
         person.setClientId(clientId);
-        List<String> personErrors = personService.validatePerson(person);
         personService.updatePerson(person);
     }
 
@@ -121,9 +143,7 @@ public class ClientController {
     }
 
     private boolean isPersonCurrentlyWithClient(ClientForm clientForm, Person person) {
-        String clientId = clientForm.getClientIdString();
-
-        return clientId.equals(person.getClientId());
+        return Objects.equals(clientForm.getClientIdString(), person.getClientId());
     }
 
     private boolean isPersonSelected(ClientForm clientForm, Person person) {
@@ -133,7 +153,7 @@ public class ClientController {
 
     private ModelAndView displayUpdateErrors(ClientForm clientForm, List<String> errors) {
         ModelAndView mav = new ModelAndView("client/edit");
-        mav.addObject("clientForm", clientForm);
+        mav.addObject("clientForm", reloadPeopleInForm(clientForm));
         mav.addObject("errors", errors);
 
         return mav;
@@ -149,8 +169,16 @@ public class ClientController {
 
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public String delete(@RequestParam String command, @RequestParam Integer clientId) {
-        if (COMMAND_DELETE.equals(command))
+        if (COMMAND_DELETE.equals(command)) {
+            List<Integer> associatedPersonIds = personService.listPersonIdsForClient(clientId);
+
+            for (Integer personId : associatedPersonIds) {
+                Person person = personService.readPerson(personId);
+                clearClientForPerson(person);
+            }
+
             clientService.deleteClient(clientId);
+        }
 
         return "redirect:/client/list";
     }
@@ -184,9 +212,15 @@ public class ClientController {
         public void setSelectedPersonIds(List<Integer> selectedPersonIds) {
             this.selectedPersonIds = selectedPersonIds;
         }
+        
+        public void setClientId(Integer clientId) {
+            this.client.setClientId(clientId);
+        }
 
         public String getClientIdString() {
-            return client.getClientId().toString();
+            Integer clientId = client.getClientId();
+
+            return clientId != null ? clientId.toString() : null;
         }
     }
 

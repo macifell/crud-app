@@ -1,5 +1,6 @@
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
 <%@taglib prefix='fn' uri='http://java.sun.com/jsp/jstl/functions'%>
+<%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -23,16 +24,24 @@
         <form action="${pageContext.request.contextPath}/client/create" method="POST">
             <br/>
             <label for="companyName">Company Name:</label>
-            <input type="text" name="companyName" value="${client.companyName}"/>
+            <input type="text" name="client.companyName" value="${clientForm.client.companyName}"/>
             <br/>
-            <label for="websiteUri">Website Uri:</label>
-            <input type="text" name="websiteUri" value="${client.websiteUri}"/>
+            <label for="client.websiteUri">Website Uri:</label>
+            <input type="text" name="client.websiteUri" value="${clientForm.client.websiteUri}"/>
             <br/>
-            <label for="phoneNumber">Phone Number:</label>
-            <input type="text" name="phoneNumber" value="${client.phoneNumber}"/>
+            <label for="client.phoneNumber">Phone Number:</label>
+            <input type="text" name="client.phoneNumber" value="${clientForm.client.phoneNumber}"/>
             <br/>
-            <label for="mailingAddress">Mailing Address:</label>
-            <input type="text" name="mailingAddress" value="${client.mailingAddress}"/>
+            <label for="client.mailingAddress">Mailing Addr:</label>
+            <input type="text" name="client.mailingAddress" value="${clientForm.client.mailingAddress}"/>
+            <br/>
+            <c:forEach items="${clientForm.people}" var="person">
+              <form:checkbox
+                path="clientForm.selectedPersonIds"
+                value="${person.personId}"
+                label="${person.firstName} ${person.lastName}"
+                ></form:checkbox>
+            </c:forEach>
             <br/>
             <input type="submit" name="Submit" value="Submit"/>
         </form>

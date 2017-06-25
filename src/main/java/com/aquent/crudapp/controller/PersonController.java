@@ -1,19 +1,15 @@
 package com.aquent.crudapp.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.aquent.crudapp.domain.Person;
-import com.aquent.crudapp.service.PersonService;
+import com.aquent.crudapp.service.*;
 
 /**
  * Controller for handling basic person management operations.
@@ -24,7 +20,11 @@ public class PersonController {
 
     public static final String COMMAND_DELETE = "Delete";
 
-    @Inject private PersonService personService;
+    @Inject
+    private PersonService personService;
+
+    @Inject
+    private ClientService clientService;
 
     /**
      * Renders the listing page.
@@ -47,16 +47,17 @@ public class PersonController {
     public ModelAndView create() {
         ModelAndView mav = new ModelAndView("person/create");
         mav.addObject("person", new Person());
+        mav.addObject("clients", clientService.listAllClients());
         mav.addObject("errors", new ArrayList<String>());
         return mav;
     }
 
     /**
-     * Validates and saves a new person.
-     * On success, the user is redirected to the listing page.
-     * On failure, the form is redisplayed with the validation errors.
+     * Validates and saves a new person. On success, the user is redirected to the listing page. On
+     * failure, the form is redisplayed with the validation errors.
      *
-     * @param person populated form bean for the person
+     * @param person
+     *            populated form bean for the person
      * @return redirect, or create view with errors
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
@@ -68,6 +69,7 @@ public class PersonController {
         } else {
             ModelAndView mav = new ModelAndView("person/create");
             mav.addObject("person", person);
+            mav.addObject("clients", clientService.listAllClients());
             mav.addObject("errors", errors);
             return mav;
         }
@@ -76,23 +78,25 @@ public class PersonController {
     /**
      * Renders an edit form for an existing person record.
      *
-     * @param personId the ID of the person to edit
+     * @param personId
+     *            the ID of the person to edit
      * @return edit view populated from the person record
      */
     @RequestMapping(value = "edit/{personId}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable Integer personId) {
         ModelAndView mav = new ModelAndView("person/edit");
         mav.addObject("person", personService.readPerson(personId));
+        mav.addObject("clients", clientService.listAllClients());
         mav.addObject("errors", new ArrayList<String>());
         return mav;
     }
 
     /**
-     * Validates and saves an edited person.
-     * On success, the user is redirected to the listing page.
+     * Validates and saves an edited person. On success, the user is redirected to the listing page.
      * On failure, the form is redisplayed with the validation errors.
      *
-     * @param person populated form bean for the person
+     * @param person
+     *            populated form bean for the person
      * @return redirect, or edit view with errors
      */
     @RequestMapping(value = "edit", method = RequestMethod.POST)
@@ -104,6 +108,7 @@ public class PersonController {
         } else {
             ModelAndView mav = new ModelAndView("person/edit");
             mav.addObject("person", person);
+            mav.addObject("clients", clientService.listAllClients());
             mav.addObject("errors", errors);
             return mav;
         }
@@ -112,7 +117,8 @@ public class PersonController {
     /**
      * Renders the deletion confirmation page.
      *
-     * @param personId the ID of the person to be deleted
+     * @param personId
+     *            the ID of the person to be deleted
      * @return delete view populated from the person record
      */
     @RequestMapping(value = "delete/{personId}", method = RequestMethod.GET)
@@ -125,8 +131,10 @@ public class PersonController {
     /**
      * Handles person deletion or cancellation, redirecting to the listing page in either case.
      *
-     * @param command the command field from the form
-     * @param personId the ID of the person to be deleted
+     * @param command
+     *            the command field from the form
+     * @param personId
+     *            the ID of the person to be deleted
      * @return redirect to the listing page
      */
     @RequestMapping(value = "delete", method = RequestMethod.POST)
