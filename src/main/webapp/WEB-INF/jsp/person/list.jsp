@@ -19,7 +19,11 @@
     </head>
     <body class="container">
         <h1 class="text-center">Person Listing</h1>     
-        <p><a class="btn btn-success" role="button" href="${pageContext.request.contextPath}/person/create">Create New Person</a></p>
+        <p>
+            <a class="btn btn-success" role="button" href="${pageContext.request.contextPath}/person/create">
+                Create New Person
+            </a>
+        </p>
         <c:choose>
             <c:when test="${fn:length(persons) gt 0}">
                 <table class="table">
@@ -38,8 +42,20 @@
                                 <td>${person.lastName}</td>
                                 <td>${person.emailAddress}</td>
                                 <td>
-                                    <a class="btn btn-primary" role="button"  href="${pageContext.request.contextPath}/person/edit/${person.personId}">Edit Person</a>
-                                    <a class="btn btn-danger" role="button"  href="${pageContext.request.contextPath}/person/delete/${person.personId}">Delete Person</a>
+                                    <a
+                                       class="btn btn-primary"
+                                       role="button"
+                                       href="${pageContext.request.contextPath}/person/edit/${person.personId}"
+                                       >
+                                      Edit Person
+                                    </a>
+                                    <a
+                                       class="btn btn-danger"
+                                       role="button"
+                                       href="${pageContext.request.contextPath}/person/delete/${person.personId}"
+                                       >
+                                      Delete Person
+                                    </a>
                                 </td>
                             </tr>
                         </c:forEach>

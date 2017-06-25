@@ -11,9 +11,6 @@ import org.springframework.transaction.annotation.*;
 import com.aquent.crudapp.data.dao.PersonDao;
 import com.aquent.crudapp.domain.Person;
 
-/**
- * Default implementation of {@link PersonService}.
- */
 public class DefaultPersonService implements PersonService {
 
     private PersonDao personDao;

@@ -97,6 +97,7 @@ public class ClientController {
         clientForm.setClient(client);
         clientForm.setPeople(personService.listPeople());
         clientForm.setSelectedPersonIds(selectedPersonIds);
+
         return clientForm;
     }
 
@@ -125,15 +126,6 @@ public class ClientController {
                 setClientForPerson(person, clientForm.getClientIdString());
     }
 
-    private void clearClientForPerson(Person person) {
-        setClientForPerson(person, "");
-    }
-
-    private void setClientForPerson(Person person, String clientId) {
-        person.setClientId(clientId);
-        personService.updatePerson(person);
-    }
-
     private boolean isPersonLeavingClient(ClientForm clientForm, Person person) {
         return isPersonCurrentlyWithClient(clientForm, person) && !isPersonSelected(clientForm, person);
     }
@@ -149,6 +141,15 @@ public class ClientController {
     private boolean isPersonSelected(ClientForm clientForm, Person person) {
         return clientForm.getSelectedPersonIds() != null
                && clientForm.getSelectedPersonIds().contains(person.getPersonId());
+    }
+
+    private void clearClientForPerson(Person person) {
+        setClientForPerson(person, "");
+    }
+
+    private void setClientForPerson(Person person, String clientId) {
+        person.setClientId(clientId);
+        personService.updatePerson(person);
     }
 
     private ModelAndView displayUpdateErrors(ClientForm clientForm, List<String> errors) {
@@ -170,58 +171,13 @@ public class ClientController {
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public String delete(@RequestParam String command, @RequestParam Integer clientId) {
         if (COMMAND_DELETE.equals(command)) {
-            List<Integer> associatedPersonIds = personService.listPersonIdsForClient(clientId);
-
-            for (Integer personId : associatedPersonIds) {
-                Person person = personService.readPerson(personId);
-                clearClientForPerson(person);
-            }
+            for (Integer personId : personService.listPersonIdsForClient(clientId))
+                clearClientForPerson(personService.readPerson(personId));
 
             clientService.deleteClient(clientId);
         }
 
         return "redirect:/client/list";
-    }
-
-    public static class ClientForm {
-
-        public Client client;
-        public List<Person> people;
-        public List<Integer> selectedPersonIds;
-
-        public Client getClient() {
-            return client;
-        }
-
-        public void setClient(Client client) {
-            this.client = client;
-        }
-
-        public List<Person> getPeople() {
-            return people;
-        }
-
-        public void setPeople(List<Person> people) {
-            this.people = people;
-        }
-
-        public List<Integer> getSelectedPersonIds() {
-            return selectedPersonIds;
-        }
-
-        public void setSelectedPersonIds(List<Integer> selectedPersonIds) {
-            this.selectedPersonIds = selectedPersonIds;
-        }
-
-        public void setClientId(Integer clientId) {
-            this.client.setClientId(clientId);
-        }
-
-        public String getClientIdString() {
-            Integer clientId = client.getClientId();
-
-            return clientId != null ? clientId.toString() : null;
-        }
     }
 
 }

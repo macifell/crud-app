@@ -13,7 +13,11 @@
     </head>
     <body class="container">
         <h1 class="text-center">Client Listing</h1>     
-        <p><a class="btn btn-success" role="button" href="${pageContext.request.contextPath}/client/create">Create New Client</a></p>
+        <p>
+            <a class="btn btn-success" role="button" href="${pageContext.request.contextPath}/client/create">
+                Create New Client
+            </a>
+        </p>
         <c:choose>
             <c:when test="${fn:length(clients) gt 0}">
                 <table class="table">
@@ -32,8 +36,20 @@
                                 <td>${client.websiteUri}</td>
                                 <td>${client.phoneNumber}</td>
                                 <td>
-                                    <a class="btn btn-primary" role="button" href="${pageContext.request.contextPath}/client/edit/${client.clientId}">Edit Client</a>
-                                    <a class="btn btn-danger" role="button" href="${pageContext.request.contextPath}/client/delete/${client.clientId}">Delete Client</a>
+                                    <a
+                                       class="btn btn-primary"
+                                       role="button"
+                                       href="${pageContext.request.contextPath}/client/edit/${client.clientId}"
+                                       >
+                                      Edit Client
+                                    </a>
+                                    <a
+                                       class="btn btn-danger"
+                                       role="button"
+                                       href="${pageContext.request.contextPath}/client/delete/${client.clientId}"
+                                       >
+                                      Delete Client
+                                    </a>
                                 </td>
                             </tr>
                         </c:forEach>
