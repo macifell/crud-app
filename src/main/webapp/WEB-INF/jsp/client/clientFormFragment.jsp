@@ -1,6 +1,7 @@
 <%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
 
 <input type="hidden" name="client.clientId" value="${clientForm.client.clientId}"/>
+
 <div class="form-group row">
   <label
          class="control-label col-xs-12 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-3"
@@ -18,6 +19,7 @@
            />
   </div>
 </div>
+
 <div class="form-group row">
   <label
          class="control-label col-xs-12 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-3"
@@ -35,6 +37,7 @@
            />
   </div>
 </div>
+
 <div class="form-group row">
   <label
          class="control-label col-xs-12 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-3"
@@ -52,6 +55,7 @@
            />
   </div>
 </div>
+
 <div class="form-group row">
   <label
          class="control-label col-xs-12 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-3"
@@ -69,19 +73,21 @@
            />
   </div>
 </div>
-<br/>
-  <c:forEach items="${clientForm.people}" var="person">
-    <div class="form-check row col-xs-12 col-sm-8 col-sm-offset-4 col-md-7 col-md-offset-5">
-      <form:checkbox
-        cssClass="form-check-input"
-        path="clientForm.selectedPersonIds"
-        value="${person.personId}"
-        label="${person.firstName} ${person.lastName}"
-        ></form:checkbox>
-    </div>
-  </c:forEach>
+
+<c:forEach items="${clientForm.people}" var="person">
+  <div class="form-check row col-xs-12 col-sm-8 col-sm-offset-4 col-md-7 col-md-offset-5">
+    <form:checkbox
+      cssClass="form-check-input"
+      path="clientForm.selectedPersonIds"
+      value="${person.personId}"
+      label="${person.firstName} ${person.lastName}"
+      ></form:checkbox>
+  </div>
+</c:forEach>
+
 <div class="row">
   <div class="col-xs-offset-6 col-sm-offset-8 col-md-offset-8">
+    <a class="btn btn-warning" role="button" href="${pageContext.request.contextPath}/client/list">Cancel</a>
     <input class="btn btn-primary" type="submit" name="Submit" value="Submit"/>
   </div>
-  </div>
+</div>

@@ -8,9 +8,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home</title>
     </head>
-    <body>
-        <h1>Make your choice</h1>     
-        <p><a href="${pageContext.request.contextPath}/client/list">List Clients</a></p>
-        <p><a href="${pageContext.request.contextPath}/person/list">List People</a></p>
+    <body class="container">
+        <h1 class="text-center">What would you like to do?</h1>     
+        <p class="text-center"><a href="${pageContext.request.contextPath}/client/list">List Clients</a></p>
+        <p class="text-center"><a href="${pageContext.request.contextPath}/person/list">List People</a></p>
     </body>
 </html>

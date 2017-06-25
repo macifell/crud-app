@@ -15,13 +15,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Delete Person</title>
     </head>
-    <body>
-        <h1>Delete Person</h1>
+    <body class="container">
+        <h1 class="text-center">Delete Person</h1>
         <p>You are about to delete the person ${person.firstName} ${person.lastName}:  Are you sure?</p>
         <form action="${pageContext.request.contextPath}/person/delete" method="post">
             <input type="hidden" name="personId" value="${person.personId}"/>
-            <input type="submit" name="command" value="Cancel"/>
-            <input type="submit" name="command" value="Delete"/>
+            <input class="btn btn-warning" type="submit" name="command" value="Cancel"/>
+            <input class="btn btn-danger" type="submit" name="command" value="Delete"/>
         </form>
     </body>
 </html>

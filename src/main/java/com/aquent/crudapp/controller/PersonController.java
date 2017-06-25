@@ -104,6 +104,7 @@ public class PersonController {
         List<String> errors = personService.validatePerson(person);
         if (errors.isEmpty()) {
             personService.updatePerson(person);
+            System.out.println(personService.readPerson(person.getPersonId()).getFirstName());
             return new ModelAndView("redirect:/person/list");
         } else {
             ModelAndView mav = new ModelAndView("person/edit");
