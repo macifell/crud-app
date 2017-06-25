@@ -1,6 +1,7 @@
 package com.aquent.crudapp.controller;
 
 import static com.aquent.crudapp.data.dao.ClientDaoTestFactory.*;
+import static com.aquent.crudapp.data.dao.PersonDaoTestFactory.makeListPeopleStub;
 import static com.aquent.crudapp.testutil.ValidationTestTools.makeValidator;
 import static org.junit.Assert.*;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import org.junit.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.aquent.crudapp.controller.ClientController.ClientForm;
 import com.aquent.crudapp.data.dao.ClientDaoDummy;
 import com.aquent.crudapp.domain.*;
 import com.aquent.crudapp.service.*;
@@ -17,6 +19,7 @@ public class ClientControllerTest {
 
     ClientController clientController;
     ClientService clientService;
+    PersonService personService;
 
     private void assertViewName(String viewName, ModelAndView modelAndView) {
         assertEquals(viewName, modelAndView.getViewName());
@@ -34,8 +37,12 @@ public class ClientControllerTest {
     public void setUp() {
         clientService = new DefaultClientService();
         clientService.setValidator(makeValidator());
+        personService = new DefaultPersonService();
+        personService.setValidator(makeValidator());
+        personService.setPersonDao(makeListPeopleStub(new ArrayList<>()));
         clientController = new ClientController();
         clientController.setClientService(clientService);
+        clientController.setPersonService(personService);
     }
 
     @Test
@@ -48,28 +55,30 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void create_SetsCorrectModelAndView() {
+    public void create_GET_SetsCorrectModelAndView() {
         clientService.setClientDao(new ClientDaoDummy());
         ModelAndView modelAndView = clientController.create();
 
         assertViewName("client/create", modelAndView);
         assertModelContainsKey("client", modelAndView);
+        assertModelContainsKey("people", modelAndView);
         assertModelContainsKey("errors", modelAndView);
     }
 
     @Test
-    public void createClient_SetsCorrectModelAndView_ValidationFails() {
+    public void createClient_POST_SetsCorrectModelAndView_ValidationFails() {
         clientService.setClientDao(makeCreateClientStub(1));
         Client client = new Client();
         ModelAndView modelAndView = clientController.create(client);
 
         assertViewName("client/create", modelAndView);
         assertModelContainsKey("client", modelAndView);
+        assertModelContainsKey("people", modelAndView);
         assertModelContainsKey("errors", modelAndView);
     }
 
     @Test
-    public void createClient_SetsCorrectModelAndView_ValidationSucceeds() {
+    public void createClient_POST_SetsCorrectModelAndView_ValidationSucceeds() {
         clientService.setClientDao(makeCreateClientStub(1));
         Client client = new ClientStub();
         ModelAndView modelAndView = clientController.create(client);
@@ -79,37 +88,41 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void edit_SetsCorrectModelAndView() {
+    public void edit_GET_SetsCorrectModelAndView() {
         Client client = new ClientStub();
         clientService.setClientDao(makeReadClientStub(client));
         ModelAndView modelAndView = clientController.edit(client.getClientId());
 
         assertViewName("client/edit", modelAndView);
-        assertModelContainsKey("client", modelAndView);
+        assertModelContainsKey("clientForm", modelAndView);
         assertModelContainsKey("errors", modelAndView);
     }
 
     @Test
-    public void editClient_SetsCorrectModelAndView_ValidationFails() {
+    public void editClient_POST_SetsCorrectModelAndView_ValidationFails() {
+        ClientForm clientForm = new ClientForm();
+        clientForm.setClient(new Client());
         clientService.setClientDao(new ClientDaoDummy());
-        ModelAndView modelAndView = clientController.edit(new Client());
+        ModelAndView modelAndView = clientController.edit(clientForm);
 
         assertViewName("client/edit", modelAndView);
-        assertModelContainsKey("client", modelAndView);
+        assertModelContainsKey("clientForm", modelAndView);
         assertModelContainsKey("errors", modelAndView);
     }
 
     @Test
-    public void editClient_SetsCorrectModelAndView_ValidationSucceeds() {
+    public void editClient_POST_SetsCorrectModelAndView_ValidationSucceeds() {
+        ClientForm clientForm = new ClientForm();
+        clientForm.setClient(new ClientStub());
         clientService.setClientDao(new ClientDaoDummy());
-        ModelAndView modelAndView = clientController.edit(new ClientStub());
+        ModelAndView modelAndView = clientController.edit(clientForm);
 
         assertViewName("redirect:/client/list", modelAndView);
         assertModelIsEmpty(modelAndView);
     }
 
     @Test
-    public void delete_SetsCorrectModelAndView() {
+    public void delete_GET_SetsCorrectModelAndView() {
         Client client = new ClientStub();
         clientService.setClientDao(makeReadClientStub(client));
         ModelAndView modelAndView = clientController.delete(client.getClientId());
@@ -119,7 +132,7 @@ public class ClientControllerTest {
     }
 
     @Test
-    public void deleteClient_SetsCorrectModelAndView() {
+    public void deleteClient_POST_SetsCorrectModelAndView() {
         Client client = new ClientStub();
         clientService.setClientDao(new ClientDaoDummy());
         String viewName = clientController.delete(ClientController.COMMAND_DELETE, client.getClientId());

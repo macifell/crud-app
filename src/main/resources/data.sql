@@ -5,7 +5,8 @@ INSERT INTO person (
     street_address,
     city,
     state,
-    zip_code
+    zip_code,
+    client_id
 ) VALUES (
     'John',
     'Smith',
@@ -13,7 +14,8 @@ INSERT INTO person (
     '123 Any St.',
     'Asheville',
     'NC',
-    '28801'
+    '28801',
+    null
 ), (
     'Jane',
     'Smith',
@@ -21,7 +23,8 @@ INSERT INTO person (
     '123 Any St.',
     'Asheville',
     'NC',
-    '28801'
+    '28801',
+    null
 );
 
 INSERT INTO client (

@@ -37,6 +37,12 @@ public class DefaultPersonService implements PersonService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public List<Person> listPeopleWithClient(Integer clientId) {
+        return personDao.listPeopleWithClient(clientId);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Person readPerson(Integer id) {
         return personDao.readPerson(id);
     }
@@ -63,4 +69,5 @@ public class DefaultPersonService implements PersonService {
     public List<String> validatePerson(Person person) {
         return extractViolationMessages(validator.validate(person));
     }
+
 }
