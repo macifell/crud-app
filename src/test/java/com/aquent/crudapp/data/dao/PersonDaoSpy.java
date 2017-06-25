@@ -19,7 +19,7 @@ public class PersonDaoSpy extends PersonDaoDummy {
         this.peopleWithClient = null;
         this.personToRead = null;
     }
-    
+
     public void setPeopleWithClient(List<Person> peopleWithClient) {
         this.peopleWithClient = peopleWithClient;
     }
@@ -45,7 +45,7 @@ public class PersonDaoSpy extends PersonDaoDummy {
     public Person readPerson(Integer id) {
         return personToRead;
     }
-    
+
     @Override
     public List<Person> listPeopleWithClient(Integer clientId) {
         return peopleWithClient;

@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.Validator;
 
 import com.aquent.crudapp.data.dao.ClientDao;
-import com.aquent.crudapp.domain.*;
+import com.aquent.crudapp.domain.Client;
 
 public interface ClientService {
 

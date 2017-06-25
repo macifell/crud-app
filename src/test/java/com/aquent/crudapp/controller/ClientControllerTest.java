@@ -1,7 +1,7 @@
 package com.aquent.crudapp.controller;
 
 import static com.aquent.crudapp.data.dao.ClientDaoTestFactory.*;
-import static com.aquent.crudapp.data.dao.PersonDaoTestFactory.*;
+import static com.aquent.crudapp.data.dao.PersonDaoTestFactory.makeListPeopleAndClientStub;
 import static com.aquent.crudapp.testutil.ValidationTestTools.makeValidator;
 import static java.util.Arrays.asList;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;

@@ -1,17 +1,12 @@
 package com.aquent.crudapp.data.dao.jdbc;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.jdbc.core.namedparam.*;
+import org.springframework.jdbc.support.*;
+import org.springframework.transaction.annotation.*;
 
 import com.aquent.crudapp.data.dao.PersonDao;
 import com.aquent.crudapp.domain.Person;

@@ -16,9 +16,9 @@ public class PersonServiceTest {
 
     PersonService personService;
 
-//    private void assertNoViolations(Person person) {
-//        assertViolations(person);
-//    }
+    // private void assertNoViolations(Person person) {
+    // assertViolations(person);
+    // }
 
     private void assertViolations(Person person, String... expectedViolationMessages) {
         List<String> violationMessages = personService.validatePerson(person);

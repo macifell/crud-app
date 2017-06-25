@@ -8,7 +8,7 @@ public class ClientDaoSpy extends ClientDaoDummy {
     private int deleteCallCount;
     private Client lastUpdateClient;
     private Integer lastDeleteClientId;
-    
+
     public ClientDaoSpy() {
         updateCallCount = 0;
         deleteCallCount = 0;

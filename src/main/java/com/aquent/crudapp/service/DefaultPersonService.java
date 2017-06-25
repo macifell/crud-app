@@ -40,7 +40,7 @@ public class DefaultPersonService implements PersonService {
     public List<Integer> listPersonIdsForClient(Integer clientId) {
         List<Person> peopleForClient = personDao.listPeopleWithClient(clientId);
         List<Integer> personIds = new ArrayList<>(peopleForClient.size());
-        
+
         for (Person person : peopleForClient) {
             personIds.add(person.getPersonId());
         }

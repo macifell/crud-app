@@ -212,7 +212,7 @@ public class ClientController {
         public void setSelectedPersonIds(List<Integer> selectedPersonIds) {
             this.selectedPersonIds = selectedPersonIds;
         }
-        
+
         public void setClientId(Integer clientId) {
             this.client.setClientId(clientId);
         }

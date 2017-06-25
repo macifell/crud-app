@@ -1,7 +1,6 @@
 package com.aquent.crudapp.domain;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * The person entity corresponding to the "person" table in the database.
