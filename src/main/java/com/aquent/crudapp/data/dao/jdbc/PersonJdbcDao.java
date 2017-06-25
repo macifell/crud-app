@@ -40,7 +40,7 @@ public class PersonJdbcDao implements PersonDao {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public List<Person> listPeopleWithClient(Integer clientId) {
+    public List<Person> listClientContacts(Integer clientId) {
         return namedParameterJdbcTemplate.query(SQL_LIST_PEOPLE_WITH_CLIENT,
                                                 Collections.singletonMap("clientId", clientId), new PersonRowMapper());
     }

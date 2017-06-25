@@ -12,19 +12,23 @@ public class PersonDaoSpy extends PersonDaoDummy {
     private List<Person> peopleWithClient;
     private Person personToRead;
 
-    public PersonDaoSpy(List<Person> allPeople) {
+    public PersonDaoSpy() {
         this.updateCallCount = 0;
         this.updatedPeople = new ArrayList<>();
-        this.allPeople = allPeople;
+        this.allPeople = null;
         this.peopleWithClient = null;
         this.personToRead = null;
+    }
+
+    public void setAllPeople(List<Person> allPeople) {
+        this.allPeople = allPeople;
     }
 
     public void setPeopleWithClient(List<Person> peopleWithClient) {
         this.peopleWithClient = peopleWithClient;
     }
 
-    public void setReadPerson(Person personToRead) {
+    public void setPersonToRead(Person personToRead) {
         this.personToRead = personToRead;
     }
 
@@ -47,7 +51,7 @@ public class PersonDaoSpy extends PersonDaoDummy {
     }
 
     @Override
-    public List<Person> listPeopleWithClient(Integer clientId) {
+    public List<Person> listClientContacts(Integer clientId) {
         return peopleWithClient;
     }
 

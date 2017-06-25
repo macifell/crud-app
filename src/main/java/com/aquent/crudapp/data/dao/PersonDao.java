@@ -8,7 +8,7 @@ public interface PersonDao {
 
     List<Person> listPeople();
 
-    List<Person> listPeopleWithClient(Integer clientId);
+    List<Person> listClientContacts(Integer clientId);
 
     Integer createPerson(Person person);
 

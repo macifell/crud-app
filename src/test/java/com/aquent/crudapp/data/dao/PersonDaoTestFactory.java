@@ -20,7 +20,7 @@ public class PersonDaoTestFactory {
         return new PersonDaoDummy() {
 
             @Override
-            public List<Person> listPeopleWithClient(Integer clientId) {
+            public List<Person> listClientContacts(Integer clientId) {
                 return responseList;
             }
         };
@@ -36,14 +36,18 @@ public class PersonDaoTestFactory {
             }
 
             @Override
-            public List<Person> listPeopleWithClient(Integer clientId) {
+            public List<Person> listClientContacts(Integer clientId) {
                 return listPeopleWithClientResponse;
             }
         };
     }
 
     public static PersonDaoSpy makePersonSpy(List<Person> allPeople) {
-        return new PersonDaoSpy(allPeople);
+        PersonDaoSpy spy = new PersonDaoSpy();
+        spy.setAllPeople(allPeople);
+
+        return spy;
+
     }
 
 }

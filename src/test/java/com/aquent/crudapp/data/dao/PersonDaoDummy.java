@@ -12,7 +12,7 @@ public class PersonDaoDummy implements PersonDao {
     }
 
     @Override
-    public List<Person> listPeopleWithClient(Integer clientId) {
+    public List<Person> listClientContacts(Integer clientId) {
         return null;
     }
 

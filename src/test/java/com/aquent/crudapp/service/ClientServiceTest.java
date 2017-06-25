@@ -61,23 +61,23 @@ public class ClientServiceTest {
     @Test
     public void updateClient_CallsDaoWithCorrectClient() {
         Client client = new Client();
-        ClientDaoSpy clientSpy = makeClientSpy();
-        clientService.setClientDao(clientSpy);
+        ClientDaoSpy spy = makeClientSpy();
+        clientService.setClientDao(spy);
         clientService.updateClient(client);
 
-        assertEquals(1, clientSpy.getUpdateCallCount());
-        assertEquals(client, clientSpy.getLastUpdateClient());
+        assertEquals(1, spy.getUpdateCallCount());
+        assertEquals(client, spy.getLastUpdateClient());
     }
 
     @Test
     public void deleteClient_CallsDaoWithCorrecClientId() {
         Integer clientId = 12;
-        ClientDaoSpy clientSpy = makeClientSpy();
-        clientService.setClientDao(clientSpy);
+        ClientDaoSpy spy = makeClientSpy();
+        clientService.setClientDao(spy);
         clientService.deleteClient(clientId);
 
-        assertEquals(1, clientSpy.getDeleteCallCount());
-        assertEquals(clientId, clientSpy.getLastDeleteClientId());
+        assertEquals(1, spy.getDeleteCallCount());
+        assertEquals(clientId, spy.getLastDeleteClientId());
     }
 
     @Test
@@ -225,6 +225,14 @@ public class ClientServiceTest {
     public void validateClient_FailsWithInvalidPhoneNumber_IncorrectNumberOfDigits() {
         Client client = new ClientStub();
         client.setPhoneNumber("123-456-789");
+
+        assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
+    }
+
+    @Test
+    public void validateClient_FailsWithInvalidPhoneNumber_TooManyDigits() {
+        Client client = new ClientStub();
+        client.setPhoneNumber("123-456-78900");
 
         assertViolations(client, Client.PHONE_NUMBER_INVALID_MESSAGE);
     }

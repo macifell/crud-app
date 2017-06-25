@@ -1,7 +1,7 @@
 package com.aquent.crudapp.controller;
 
 import static com.aquent.crudapp.data.dao.ClientDaoTestFactory.*;
-import static com.aquent.crudapp.data.dao.PersonDaoTestFactory.makeListPeopleAndClientStub;
+import static com.aquent.crudapp.data.dao.PersonDaoTestFactory.*;
 import static com.aquent.crudapp.testutil.ValidationTestTools.makeValidator;
 import static java.util.Arrays.asList;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
@@ -39,42 +39,43 @@ public class ClientControllerTest {
     }
 
     private PersonDaoSpy createClientWithSpy(Person person, Client client) {
-        PersonDaoSpy personDaoSpy = attachPersonDaoSpy(asList(person));
+        PersonDaoSpy spy = attachPersonDaoSpy(asList(person));
         ClientForm clientForm = makeClientForm(client, asList(person.getPersonId()));
 
         clientService.setClientDao(makeCreateClientStub(1));
         clientController.create(clientForm);
-        return personDaoSpy;
+
+        return spy;
     }
 
     private PersonDaoSpy editClientWithSpy(List<Integer> selectedPersonIds, List<Person> allPeople, Client client) {
-        PersonDaoSpy personDaoSpy = attachPersonDaoSpy(allPeople);
+        PersonDaoSpy spy = attachPersonDaoSpy(allPeople);
         ClientForm clientForm = makeClientForm(client, selectedPersonIds);
 
         clientService.setClientDao(new ClientDaoDummy());
         clientController.edit(clientForm);
 
-        return personDaoSpy;
+        return spy;
     }
 
-    private PersonDaoSpy deleteClientWithSpy(List<Person> associatedPersonIds, List<Person> allPeople, Client client) {
-        PersonDaoSpy personDaoSpy = attachPersonDaoSpy(allPeople);
-        personDaoSpy.setPeopleWithClient(associatedPersonIds);
+    private PersonDaoSpy deleteClientWithSpy(List<Person> contacts, List<Person> allPeople, Client client) {
+        PersonDaoSpy spy = attachPersonDaoSpy(allPeople);
+        spy.setPeopleWithClient(contacts);
 
-        if (!associatedPersonIds.isEmpty())
-            personDaoSpy.setReadPerson(associatedPersonIds.get(0));
+        if (!contacts.isEmpty())
+            spy.setPersonToRead(contacts.get(0));
 
         clientService.setClientDao(new ClientDaoDummy());
         clientController.delete(ClientController.COMMAND_DELETE, client.getClientId());
 
-        return personDaoSpy;
+        return spy;
     }
 
     private PersonDaoSpy attachPersonDaoSpy(List<Person> allPeople) {
-        PersonDaoSpy personDaoSpy = new PersonDaoSpy(allPeople);
-        personService.setPersonDao(personDaoSpy);
+        PersonDaoSpy spy = makePersonSpy(allPeople);
+        personService.setPersonDao(spy);
 
-        return personDaoSpy;
+        return spy;
     }
 
     private ClientForm makeClientForm(Client client, List<Integer> selectedPersonIds) {
@@ -141,18 +142,17 @@ public class ClientControllerTest {
     public void createClient_POST_UpdatesPeople() {
         Person person = new PersonStub();
         Client client = new ClientStub();
-        PersonDaoSpy personDaoSpy = createClientWithSpy(person, client);
+        PersonDaoSpy spy = createClientWithSpy(person, client);
 
         assertClientIdsMatch(client, person);
-        assertEquals(1, personDaoSpy.getUpdateCallCount());
-        assertThat(personDaoSpy.getUpdatedPeople(), containsInAnyOrder(person));
+        assertEquals(1, spy.getUpdateCallCount());
+        assertThat(spy.getUpdatedPeople(), containsInAnyOrder(person));
     }
 
     @Test
     public void edit_GET_SetsCorrectModelAndView() {
         Client client = new ClientStub();
         clientService.setClientDao(makeReadClientStub(client));
-        personService.setPersonDao(makeListPeopleAndClientStub(new ArrayList<>(), new ArrayList<>()));
         ModelAndView modelAndView = clientController.edit(client.getClientId());
 
         assertViewName("client/edit", modelAndView);
@@ -187,11 +187,11 @@ public class ClientControllerTest {
     public void editClient_POST_UpdatesAddedPerson() {
         Person person = new PersonStub();
         Client client = new ClientStub();
-        PersonDaoSpy personDaoSpy = editClientWithSpy(asList(person.getPersonId()), asList(person), client);
+        PersonDaoSpy spy = editClientWithSpy(asList(person.getPersonId()), asList(person), client);
 
         assertClientIdsMatch(client, person);
-        assertEquals(1, personDaoSpy.getUpdateCallCount());
-        assertThat(personDaoSpy.getUpdatedPeople(), containsInAnyOrder(person));
+        assertEquals(1, spy.getUpdateCallCount());
+        assertThat(spy.getUpdatedPeople(), containsInAnyOrder(person));
     }
 
     @Test
@@ -199,11 +199,11 @@ public class ClientControllerTest {
         Person person = new PersonStub();
         Client client = new ClientStub();
         person.setClientId(client.getClientId().toString());
-        PersonDaoSpy personDaoSpy = editClientWithSpy(asList(), asList(person), client);
+        PersonDaoSpy spy = editClientWithSpy(asList(), asList(person), client);
 
-        assertEquals(1, personDaoSpy.getUpdateCallCount());
+        assertEquals(1, spy.getUpdateCallCount());
         assertEquals("", person.getClientId());
-        assertThat(personDaoSpy.getUpdatedPeople(), containsInAnyOrder(person));
+        assertThat(spy.getUpdatedPeople(), containsInAnyOrder(person));
     }
 
     @Test
@@ -211,18 +211,18 @@ public class ClientControllerTest {
         Person person = new PersonStub();
         Client client = new ClientStub();
         person.setClientId(client.getClientId().toString());
-        PersonDaoSpy personDaoSpy = editClientWithSpy(asList(person.getPersonId()), asList(person), client);
+        PersonDaoSpy spy = editClientWithSpy(asList(person.getPersonId()), asList(person), client);
 
-        assertEquals(0, personDaoSpy.getUpdateCallCount());
+        assertEquals(0, spy.getUpdateCallCount());
     }
 
     @Test
     public void editClient_POST_DoesNotUpdatePreviouslyUnselectedPerson() {
         Person person = new PersonStub();
         Client client = new ClientStub();
-        PersonDaoSpy personDaoSpy = editClientWithSpy(asList(), asList(person), client);
+        PersonDaoSpy spy = editClientWithSpy(asList(), asList(person), client);
 
-        assertEquals(0, personDaoSpy.getUpdateCallCount());
+        assertEquals(0, spy.getUpdateCallCount());
     }
 
     @Test
@@ -249,11 +249,11 @@ public class ClientControllerTest {
         Person person = new PersonStub();
         Client client = new ClientStub();
         person.setClientId(client.getClientId().toString());
-        PersonDaoSpy personDaoSpy = deleteClientWithSpy(asList(person), asList(person), client);
+        PersonDaoSpy spy = deleteClientWithSpy(asList(person), asList(person), client);
 
-        assertEquals(1, personDaoSpy.getUpdateCallCount());
+        assertEquals(1, spy.getUpdateCallCount());
         assertEquals("", person.getClientId());
-        assertThat(personDaoSpy.getUpdatedPeople(), containsInAnyOrder(person));
+        assertThat(spy.getUpdatedPeople(), containsInAnyOrder(person));
     }
 
     @Test
@@ -261,9 +261,9 @@ public class ClientControllerTest {
         Person person = new PersonStub();
         Client client = new ClientStub();
         person.setClientId(client.getClientId().toString());
-        PersonDaoSpy personDaoSpy = deleteClientWithSpy(asList(), asList(person), client);
+        PersonDaoSpy spy = deleteClientWithSpy(asList(), asList(person), client);
 
-        assertEquals(0, personDaoSpy.getUpdateCallCount());
+        assertEquals(0, spy.getUpdateCallCount());
     }
 
 }

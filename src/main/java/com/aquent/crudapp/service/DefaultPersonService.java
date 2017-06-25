@@ -35,10 +35,10 @@ public class DefaultPersonService implements PersonService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public List<Integer> listPersonIdsForClient(Integer clientId) {
-        List<Person> peopleForClient = personDao.listPeopleWithClient(clientId);
-        List<Integer> personIds = new ArrayList<>(peopleForClient.size());
+        List<Person> clientContacts = personDao.listClientContacts(clientId);
+        List<Integer> personIds = new ArrayList<>(clientContacts.size());
 
-        for (Person person : peopleForClient) {
+        for (Person person : clientContacts) {
             personIds.add(person.getPersonId());
         }
 
