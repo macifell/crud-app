@@ -1,7 +1,7 @@
 package com.aquent.crudapp.service;
 
 import static com.aquent.crudapp.data.dao.ClientDaoTestFactory.*;
-import static com.aquent.crudapp.testutil.ValidationTestTools.makeValidator;
+import static com.aquent.crudapp.testutil.TestTools.*;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.*;
@@ -112,7 +112,7 @@ public class ClientServiceTest {
     @Test
     public void validateClient_FailsWithTooLongCompanyName() {
         Client client = new ClientStub();
-        client.setCompanyName(String.join("", Collections.nCopies(51, "x")));
+        client.setCompanyName(generateCopies(51, "x"));
 
         assertViolations(client, Client.COMPANY_NAME_LENGTH_MESSAGE);
     }
@@ -128,7 +128,7 @@ public class ClientServiceTest {
     @Test
     public void validateClient_SucceedsWithValidLongCompanyName() {
         Client client = new ClientStub();
-        client.setCompanyName(String.join("", Collections.nCopies(50, "x")));
+        client.setCompanyName(generateCopies(50, "x"));
 
         assertNoViolations(client);
     }
@@ -152,7 +152,7 @@ public class ClientServiceTest {
     @Test
     public void validateClient_FailsWithTooLongWebsiteUri() {
         Client client = new ClientStub();
-        client.setWebsiteUri(String.join("", Collections.nCopies(51, "x")));
+        client.setWebsiteUri(generateCopies(51, "x"));
 
         assertViolations(client, Client.WEBSITE_URI_LENGTH_MESSAGE);
     }
@@ -168,7 +168,7 @@ public class ClientServiceTest {
     @Test
     public void validateClient_SucceedsWithValidLongWebsiteUri() {
         Client client = new ClientStub();
-        client.setWebsiteUri(String.join("", Collections.nCopies(50, "x")));
+        client.setWebsiteUri(generateCopies(50, "x"));
 
         assertNoViolations(client);
     }
@@ -264,7 +264,7 @@ public class ClientServiceTest {
     @Test
     public void validateClient_FailsWithTooLongMailingAddress() {
         Client client = new ClientStub();
-        client.setMailingAddress(String.join("", Collections.nCopies(51, "x")));
+        client.setMailingAddress(generateCopies(51, "x"));
 
         assertViolations(client, Client.MAILING_ADDRESS_LENGTH_MESSAGE);
     }
@@ -280,7 +280,7 @@ public class ClientServiceTest {
     @Test
     public void validateClient_SucceedsWithValidLongMailingAddress() {
         Client client = new ClientStub();
-        client.setMailingAddress(String.join("", Collections.nCopies(50, "x")));
+        client.setMailingAddress(generateCopies(50, "x"));
 
         assertNoViolations(client);
     }

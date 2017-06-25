@@ -15,6 +15,7 @@ public class Person {
     public static final String STATE_NULL_MESSAGE = "Sate may not be null";
     public static final String ZIP_CODE_NULL_MESSAGE = "Zip code may not be null";
     public static final String CLIENT_ID_NULL_MESSAGE = "Client id may not be null";
+    public static final String CLIENT_ID_LENGTH_MESSAGE = "Client id may not be more than 50 characters";
 
     private Integer personId;
 
@@ -47,7 +48,7 @@ public class Person {
     private String zipCode;
 
     @NotNull(message = CLIENT_ID_NULL_MESSAGE)
-    @Size(min = 0, max = 50, message = "Client id may not be more than 50 characters")
+    @Size(min = 0, max = 50, message = CLIENT_ID_LENGTH_MESSAGE)
     private String clientId;
 
     public Integer getPersonId() {

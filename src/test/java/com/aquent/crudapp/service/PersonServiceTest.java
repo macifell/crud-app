@@ -1,7 +1,7 @@
 package com.aquent.crudapp.service;
 
 import static com.aquent.crudapp.data.dao.PersonDaoTestFactory.makeListPeopleWithClientStub;
-import static com.aquent.crudapp.testutil.ValidationTestTools.makeValidator;
+import static com.aquent.crudapp.testutil.TestTools.*;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.*;
 
@@ -67,6 +67,22 @@ public class PersonServiceTest {
         person.setClientId(null);
 
         assertViolations(person, Person.CLIENT_ID_NULL_MESSAGE);
+    }
+
+    @Test
+    public void validatePerson_FailsWithTooLongClientId() {
+        Person person = new PersonStub();
+        person.setClientId(generateCopies(51, "1"));
+
+        assertViolations(person, Person.CLIENT_ID_LENGTH_MESSAGE);
+    }
+
+    @Test
+    public void validatePerson_SucceedsWithValidClientId() {
+        Person person = new PersonStub();
+        person.setClientId("118");
+
+        assertNoViolations(person);
     }
 
 }
