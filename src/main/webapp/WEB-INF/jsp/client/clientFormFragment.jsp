@@ -1,3 +1,4 @@
+<%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
 <%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
 
 <input type="hidden" name="client.clientId" value="${clientForm.client.clientId}"/>
@@ -72,6 +73,12 @@
            value="${clientForm.client.mailingAddress}"
            />
   </div>
+</div>
+
+<div class="row">
+  <label class="control-label col-xs-12 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-3">
+   Contacts:
+  </label>
 </div>
 
 <c:forEach items="${clientForm.people}" var="person">
