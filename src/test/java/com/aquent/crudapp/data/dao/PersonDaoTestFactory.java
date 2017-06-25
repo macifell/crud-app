@@ -26,8 +26,24 @@ public class PersonDaoTestFactory {
         };
     }
 
-    public static PersonDaoSpy makePersonSpy() {
-        return new PersonDaoSpy();
+    public static PersonDao makeListPeopleAndClientStub(List<Person> listPeopleResponse,
+                                                        List<Person> listPeopleWithClientResponse) {
+        return new PersonDaoDummy() {
+
+            @Override
+            public List<Person> listPeople() {
+                return listPeopleResponse;
+            }
+
+            @Override
+            public List<Person> listPeopleWithClient(Integer clientId) {
+                return listPeopleWithClientResponse;
+            }
+        };
+    }
+
+    public static PersonDaoSpy makePersonSpy(List<Person> allPeople) {
+        return new PersonDaoSpy(allPeople);
     }
 
 }

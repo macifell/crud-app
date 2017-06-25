@@ -15,7 +15,7 @@ INSERT INTO person (
     'Asheville',
     'NC',
     '28801',
-    null
+    ''
 ), (
     'Jane',
     'Smith',
@@ -24,7 +24,7 @@ INSERT INTO person (
     'Asheville',
     'NC',
     '28801',
-    null
+    ''
 );
 
 INSERT INTO client (

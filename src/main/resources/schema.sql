@@ -7,7 +7,7 @@ CREATE TABLE person (
     city varchar(50) NOT NULL,
     state varchar(2) NOT NULL,
     zip_code varchar(5) NOT NULL,
-    client_id varchar(50)
+    client_id varchar(50) NOT NULL
 );
 
 CREATE TABLE client (

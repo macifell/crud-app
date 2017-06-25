@@ -11,7 +11,7 @@ public class PersonStub extends Person {
         this.setState("st");
         this.setStreetAddress("address");
         this.setZipCode("12345");
-        this.setClientId(1);
+        this.setClientId("");
     }
 
 }

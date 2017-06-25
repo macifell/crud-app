@@ -2,7 +2,7 @@ package com.aquent.crudapp.service;
 
 import static com.aquent.crudapp.service.ViolationUtilities.extractViolationMessages;
 
-import java.util.List;
+import java.util.*;
 
 import javax.validation.Validator;
 
@@ -37,8 +37,15 @@ public class DefaultPersonService implements PersonService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public List<Person> listPeopleWithClient(Integer clientId) {
-        return personDao.listPeopleWithClient(clientId);
+    public List<Integer> listPersonIdsForClient(Integer clientId) {
+        List<Person> peopleForClient = personDao.listPeopleWithClient(clientId);
+        List<Integer> personIds = new ArrayList<>(peopleForClient.size());
+        
+        for (Person person : peopleForClient) {
+            personIds.add(person.getPersonId());
+        }
+
+        return personIds;
     }
 
     @Override

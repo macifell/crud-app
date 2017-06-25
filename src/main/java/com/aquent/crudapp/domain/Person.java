@@ -15,6 +15,7 @@ public class Person {
     public static final String CITY_NULL_MESSAGE = "City may not be null";
     public static final String STATE_NULL_MESSAGE = "Sate may not be null";
     public static final String ZIP_CODE_NULL_MESSAGE = "Zip code may not be null";
+    public static final String CLIENT_ID_NULL_MESSAGE = "Client id may not be null";
 
     private Integer personId;
 
@@ -46,7 +47,9 @@ public class Person {
     @Size(min = 5, max = 5, message = "Zip code is required with length 5")
     private String zipCode;
 
-    private Integer clientId;
+    @NotNull(message = CLIENT_ID_NULL_MESSAGE)
+    @Size(min = 0, max = 50, message = "Client id may not be more than 50 characters")
+    private String clientId;
 
     public Integer getPersonId() {
         return personId;
@@ -112,11 +115,11 @@ public class Person {
         this.zipCode = zipCode;
     }
 
-    public Integer getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(Integer clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 

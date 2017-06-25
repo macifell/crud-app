@@ -4,11 +4,17 @@ import com.aquent.crudapp.domain.Client;
 
 public class ClientDaoSpy extends ClientDaoDummy {
 
-    private int updateCallCount = 0;
-    private int deleteCallCount = 0;
-
-    private Client lastUpdateClient = null;
-    private Integer lastDeleteClientId = null;
+    private int updateCallCount;
+    private int deleteCallCount;
+    private Client lastUpdateClient;
+    private Integer lastDeleteClientId;
+    
+    public ClientDaoSpy() {
+        updateCallCount = 0;
+        deleteCallCount = 0;
+        lastUpdateClient = null;
+        lastDeleteClientId = null;
+    }
 
     public int getUpdateCallCount() {
         return updateCallCount;

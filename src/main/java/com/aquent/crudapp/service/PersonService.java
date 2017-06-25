@@ -15,7 +15,7 @@ public interface PersonService {
 
     List<Person> listPeople();
 
-    List<Person> listPeopleWithClient(Integer clientId);
+    List<Integer> listPersonIdsForClient(Integer clientId);
 
     Integer createPerson(Person person);
 

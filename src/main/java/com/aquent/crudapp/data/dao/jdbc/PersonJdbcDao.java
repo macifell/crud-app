@@ -22,6 +22,7 @@ import com.aquent.crudapp.domain.Person;
 public class PersonJdbcDao implements PersonDao {
 
     private static final String SQL_LIST_PEOPLE = "SELECT * FROM person ORDER BY first_name, last_name, person_id";
+    private static final String SQL_LIST_PEOPLE_WITH_CLIENT = "SELECT * FROM person WHERE client_id = :clientId ORDER BY first_name, last_name, person_id";
     private static final String SQL_READ_PERSON = "SELECT * FROM person WHERE person_id = :personId";
     private static final String SQL_DELETE_PERSON = "DELETE FROM person WHERE person_id = :personId";
     private static final String SQL_UPDATE_PERSON = "UPDATE person SET (first_name, last_name, email_address, street_address, city, state, zip_code, client_id)"
@@ -45,7 +46,8 @@ public class PersonJdbcDao implements PersonDao {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public List<Person> listPeopleWithClient(Integer clientId) {
-        return null;
+        return namedParameterJdbcTemplate.query(SQL_LIST_PEOPLE_WITH_CLIENT,
+                                                Collections.singletonMap("clientId", clientId), new PersonRowMapper());
     }
 
     @Override
@@ -77,9 +79,6 @@ public class PersonJdbcDao implements PersonDao {
         return keyHolder.getKey().intValue();
     }
 
-    /**
-     * Row mapper for person records.
-     */
     private static final class PersonRowMapper implements RowMapper<Person> {
 
         @Override
@@ -93,7 +92,7 @@ public class PersonJdbcDao implements PersonDao {
             person.setCity(rs.getString("city"));
             person.setState(rs.getString("state"));
             person.setZipCode(rs.getString("zip_code"));
-            person.setClientId(rs.getInt("client_id"));
+            person.setClientId(rs.getString("client_id"));
             return person;
         }
     }

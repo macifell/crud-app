@@ -16,9 +16,9 @@ public class PersonServiceTest {
 
     PersonService personService;
 
-    private void assertNoViolations(Person person) {
-        assertViolations(person);
-    }
+//    private void assertNoViolations(Person person) {
+//        assertViolations(person);
+//    }
 
     private void assertViolations(Person person, String... expectedViolationMessages) {
         List<String> violationMessages = personService.validatePerson(person);
@@ -33,12 +33,15 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void listPeopleWithClient_ReturnsDaoList() {
+    public void listPeopleWithClient_ReturnsIdsFromDaoList() {
         List<Person> responseList = new ArrayList<>();
-        responseList.add(new Person());
+        List<Integer> expectedIds = new ArrayList<>();
+        Person personStub = new PersonStub();
+        responseList.add(personStub);
+        expectedIds.add(personStub.getPersonId());
         personService.setPersonDao(makeListPeopleWithClientStub(responseList));
 
-        assertEquals(responseList, personService.listPeopleWithClient(0));
+        assertEquals(expectedIds, personService.listPersonIdsForClient(0));
     }
 
     @Test
@@ -47,6 +50,7 @@ public class PersonServiceTest {
         List<String> expectedOrder = new ArrayList<>();
 
         expectedOrder.add(Person.CITY_NULL_MESSAGE);
+        expectedOrder.add(Person.CLIENT_ID_NULL_MESSAGE);
         expectedOrder.add(Person.EMAIL_ADDRESS_NULL_MESSAGE);
         expectedOrder.add(Person.FIRST_NAME_NULL_MESSAGE);
         expectedOrder.add(Person.LAST_NAME_NULL_MESSAGE);
@@ -58,11 +62,11 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void validatePerson_SucceedsWithNullClientId() {
+    public void validatePerson_FailsWithNullClientId() {
         Person person = new PersonStub();
         person.setClientId(null);
 
-        assertNoViolations(person);
+        assertViolations(person, Person.CLIENT_ID_NULL_MESSAGE);
     }
 
 }

@@ -73,16 +73,7 @@ public class ClientController {
         ClientForm clientForm = new ClientForm();
         clientForm.setClient(clientService.readClient(clientId));
         clientForm.setPeople(personService.listPeople());
-        
-        List<Integer> selectedPersonIds = new ArrayList<Integer>();
-        
-        for (Person person : clientForm.getPeople()) {
-            System.out.println(person.getClientId());
-            if (person.getClientId() != null && person.getClientId().equals(clientId))
-                selectedPersonIds.add(person.getPersonId());
-        }
-        
-        clientForm.setSelectedPersonIds(selectedPersonIds);
+        clientForm.setSelectedPersonIds(personService.listPersonIdsForClient(clientId));
 
         mav.addObject("clientForm", clientForm);
         mav.addObject("errors", new ArrayList<String>());
@@ -93,35 +84,59 @@ public class ClientController {
     @RequestMapping(value = "edit", method = RequestMethod.POST)
     public ModelAndView edit(ClientForm clientForm) {
         List<String> errors = clientService.validateClient(clientForm.getClient());
-        if (errors.isEmpty()) {
-            clientService.updateClient(clientForm.getClient());
-            
-            for (Person person : personService.listPeople()) {
-                if (person.getClientId() != null && person.getClientId().equals(clientForm.getClient().getClientId())) {
-                    if (clientForm.getSelectedPersonIds() != null && !clientForm.getSelectedPersonIds().contains(person.getPersonId())) {
-                        person.setClientId(null);
-                    }
-                } else {
-                    if (clientForm.getSelectedPersonIds() != null && clientForm.getSelectedPersonIds().contains(person.getPersonId())) {
-                        person.setClientId(clientForm.getClient().getClientId());
-                    }
-                }
-                
-                List<String> personErrors = personService.validatePerson(person);
-                System.out.println(personErrors);
-                System.out.println(personErrors.isEmpty());
-                personService.updatePerson(person);
 
-            }
+        if (errors.isEmpty())
+            return updateClient(clientForm);
+        else
+            return displayUpdateErrors(clientForm, errors);
+    }
 
-            return new ModelAndView("redirect:/client/list");
-        } else {
-            ModelAndView mav = new ModelAndView("client/edit");
-            mav.addObject("clientForm", clientForm);
-            mav.addObject("errors", errors);
+    private ModelAndView updateClient(ClientForm clientForm) {
+        clientService.updateClient(clientForm.getClient());
+        updatePeopleWithClient(clientForm);
 
-            return mav;
-        }
+        return new ModelAndView("redirect:/client/list");
+    }
+
+    private void updatePeopleWithClient(ClientForm clientForm) {
+        for (Person person : personService.listPeople())
+            if (isPersonLeavingClient(clientForm, person))
+                setClientForPerson(person, "");
+            else if (isPersonJoiningClient(clientForm, person))
+                setClientForPerson(person, clientForm.getClientIdString());
+    }
+
+    private void setClientForPerson(Person person, String clientId) {
+        person.setClientId(clientId);
+        List<String> personErrors = personService.validatePerson(person);
+        personService.updatePerson(person);
+    }
+
+    private boolean isPersonLeavingClient(ClientForm clientForm, Person person) {
+        return isPersonCurrentlyWithClient(clientForm, person) && !isPersonSelected(clientForm, person);
+    }
+
+    private boolean isPersonJoiningClient(ClientForm clientForm, Person person) {
+        return !isPersonCurrentlyWithClient(clientForm, person) && isPersonSelected(clientForm, person);
+    }
+
+    private boolean isPersonCurrentlyWithClient(ClientForm clientForm, Person person) {
+        String clientId = clientForm.getClientIdString();
+
+        return clientId.equals(person.getClientId());
+    }
+
+    private boolean isPersonSelected(ClientForm clientForm, Person person) {
+        return clientForm.getSelectedPersonIds() != null
+               && clientForm.getSelectedPersonIds().contains(person.getPersonId());
+    }
+
+    private ModelAndView displayUpdateErrors(ClientForm clientForm, List<String> errors) {
+        ModelAndView mav = new ModelAndView("client/edit");
+        mav.addObject("clientForm", clientForm);
+        mav.addObject("errors", errors);
+
+        return mav;
     }
 
     @RequestMapping(value = "delete/{clientId}", method = RequestMethod.GET)
@@ -168,6 +183,10 @@ public class ClientController {
 
         public void setSelectedPersonIds(List<Integer> selectedPersonIds) {
             this.selectedPersonIds = selectedPersonIds;
+        }
+
+        public String getClientIdString() {
+            return client.getClientId().toString();
         }
     }
 

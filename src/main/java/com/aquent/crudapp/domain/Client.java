@@ -70,5 +70,5 @@ public class Client {
     public void setMailingAddress(String mailingAddress) {
         this.mailingAddress = mailingAddress;
     }
-
+    
 }
