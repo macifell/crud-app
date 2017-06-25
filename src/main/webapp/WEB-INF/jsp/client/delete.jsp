@@ -5,6 +5,7 @@
 
 <html>
     <head>
+        <%@include file="../jsAndCssFragment.jsp" %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Delete Client</title>
     </head>
