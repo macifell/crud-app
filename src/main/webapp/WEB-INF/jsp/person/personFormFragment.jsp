@@ -1,4 +1,6 @@
-<%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
+<%@taglib prefix='form' uri='http://www.springframework.org/tags/form' %>
+<%@taglib prefix='local' uri='/WEB-INF/taglib/functions.tld' %>
+<%@page import='org.apache.commons.lang3.StringEscapeUtils' %>
 
 <div id="person-form-app">
   <input type="hidden" name="personId" value="${person.personId}"/>
@@ -241,13 +243,13 @@ var app = new Vue({
 	el: '#person-form-app',
 
 	data: {
-		firstName: '${person.firstName}',
-		lastName: '${person.lastName}',
-		emailAddress: '${person.emailAddress}',
-		streetAddress: '${person.streetAddress}',
-		city: '${person.city}',
-		state: '${person.state}',
-		zipCode: '${person.zipCode}',
+		firstName: '${local:escapeJs(person.firstName)}',
+		lastName: '${local:escapeJs(person.lastName)}',
+		emailAddress: '${local:escapeJs(person.emailAddress)}',
+		streetAddress: '${local:escapeJs(person.streetAddress)}',
+		city: '${local:escapeJs(person.city)}',
+		state: '${local:escapeJs(person.state)}',
+		zipCode: '${local:escapeJs(person.zipCode)}',
 
 		firstNameError: 'First name is required with a maximum length of 50',
 		lastNameError: 'Last name is required with a maximum length of 50',

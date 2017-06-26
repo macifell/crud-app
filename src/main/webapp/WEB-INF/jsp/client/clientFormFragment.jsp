@@ -1,5 +1,6 @@
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
-<%@taglib prefix='form' uri='http://www.springframework.org/tags/form'%>
+<%@taglib prefix='form' uri='http://www.springframework.org/tags/form' %>
+<%@taglib prefix='local' uri='/WEB-INF/taglib/functions.tld' %>
 
 <div id="client-form-app">
   <input type="hidden" name="client.clientId" value="${clientForm.client.clientId}"/>
@@ -154,10 +155,10 @@ var app = new Vue({
     el: '#client-form-app',
 
     data: {
-        companyName: '${clientForm.client.companyName}',
-        websiteUri: '${clientForm.client.websiteUri}',
-        phoneNumber: '${clientForm.client.phoneNumber}',
-        mailingAddress: '${clientForm.client.mailingAddress}',
+        companyName: '${local:escapeJs(clientForm.client.companyName)}',
+        websiteUri: '${local:escapeJs(clientForm.client.websiteUri)}',
+        phoneNumber: '${local:escapeJs(clientForm.client.phoneNumber)}',
+        mailingAddress: '${local:escapeJs(clientForm.client.mailingAddress)}',
 
         companyNameError: 'Company name is required with a maximum length of 50',
         websiteUriError: 'Website uri is required with a maximum length of 50',

@@ -5,8 +5,9 @@
 --%>
 
 <%@taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
-<%@taglib prefix='fn' uri='http://java.sun.com/jsp/jstl/functions'%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix='fn' uri='http://java.sun.com/jsp/jstl/functions' %>
+<%@taglib prefix='local' uri='/WEB-INF/taglib/functions.tld' %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
@@ -38,9 +39,9 @@
                     <tbody>
                         <c:forEach items="${persons}" var="person">
                             <tr>
-                                <td>${person.firstName}</td>
-                                <td>${person.lastName}</td>
-                                <td>${person.emailAddress}</td>
+                                <td>${local:escapeHtml(person.firstName)}</td>
+                                <td>${local:escapeHtml(person.lastName)}</td>
+                                <td>${local:escapeHtml(person.emailAddress)}</td>
                                 <td>
                                     <a
                                        class="btn btn-primary"

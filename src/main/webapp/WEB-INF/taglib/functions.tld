@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+
+<taglib>
+    <short-name>Local Functions</short-name>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+
+    <function>
+        <name>escapeJs</name>
+        <function-class>org.apache.commons.text.StringEscapeUtils</function-class>
+        <function-signature>java.lang.String escapeEcmaScript(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>escapeHtml</name>
+        <function-class>org.apache.commons.text.StringEscapeUtils</function-class>
+        <function-signature>java.lang.String escapeHtml4(java.lang.String)</function-signature>
+    </function>
+</taglib>
