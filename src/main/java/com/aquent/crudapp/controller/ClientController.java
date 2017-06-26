@@ -63,7 +63,7 @@ public class ClientController {
     private ModelAndView createClient(ClientForm clientForm) {
         Integer clientId = clientService.createClient(clientForm.getClient());
         clientForm.setClientId(clientId);
-        updatePeopleWithClient(clientForm);
+        updateClientContacts(clientForm);
 
         return new ModelAndView("redirect:/client/list");
     }
@@ -113,12 +113,12 @@ public class ClientController {
 
     private ModelAndView updateClient(ClientForm clientForm) {
         clientService.updateClient(clientForm.getClient());
-        updatePeopleWithClient(clientForm);
+        updateClientContacts(clientForm);
 
         return new ModelAndView("redirect:/client/list");
     }
 
-    private void updatePeopleWithClient(ClientForm clientForm) {
+    private void updateClientContacts(ClientForm clientForm) {
         for (Person person : personService.listPeople())
             if (isPersonLeavingClient(clientForm, person))
                 clearClientForPerson(person);

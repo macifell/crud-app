@@ -209,11 +209,7 @@ var app = new Vue({
 
     methods: {
         glyphicon: function (isValid) {
-          if (isValid) {
-            return 'glyphicon-ok'
-          }
-
-          return 'glyphicon-ban-circle'
+        	return isValid ? 'glyphicon-ok' : 'glyphicon-ban-circle'
         },
         
         isLengthBetween: function (text, minimumLength, maximumLength) {
