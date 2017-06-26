@@ -35,13 +35,19 @@
       Last Name:
     </label>
     <div class="col-xs-12 col-sm-4 col-md-3">
-      <input
-             class="form-control"
-             type="text"
-             name="lastName"
-             id="lastName"
-             value="${person.lastName}"
-             />
+      <div class="input-group">
+        <input
+               class="form-control"
+               type="text"
+               name="lastName"
+               id="lastName"
+               v-model="lastName"
+               />
+
+        <span class="input-group-addon" :class="{'alert-danger': !isLastNameValid}">
+          <span class="glyphicon" :class="glyphicon(isLastNameValid)" aria-hidden="true"></span>
+        </span>
+      </div>
     </div>
   </div>
 
@@ -53,13 +59,19 @@
       Email Address:
     </label>
     <div class="col-xs-12 col-sm-4 col-md-3">
-      <input
-             class="form-control"
-             type="text"
-             name="emailAddress"
-             id="emailAddress"
-             value="${person.emailAddress}"
-             />
+      <div class="input-group">
+        <input
+               class="form-control"
+               type="text"
+               name="emailAddress"
+               id="emailAddress"
+               v-model="emailAddress"
+               />
+
+        <span class="input-group-addon" :class="{'alert-danger': !isEmailAddressValid}">
+          <span class="glyphicon" :class="glyphicon(isEmailAddressValid)" aria-hidden="true"></span>
+        </span>
+      </div>
     </div>
   </div>
 
@@ -71,13 +83,19 @@
       Street Address:
     </label>
     <div class="col-xs-12 col-sm-4 col-md-3">
-      <input
-             class="form-control"
-             type="text"
-             name="streetAddress"
-             id="streetAddress"
-             value="${person.streetAddress}"
-             />
+      <div class="input-group">
+        <input
+               class="form-control"
+               type="text"
+               name="streetAddress"
+               id="streetAddress"
+               v-model="streetAddress"
+               />
+
+        <span class="input-group-addon" :class="{'alert-danger': !isStreetAddressValid}">
+          <span class="glyphicon" :class="glyphicon(isStreetAddressValid)" aria-hidden="true"></span>
+        </span>
+      </div>
     </div>
   </div>
 
@@ -89,13 +107,19 @@
       City:
     </label>
     <div class="col-xs-12 col-sm-4 col-md-3">
-      <input
-             class="form-control"
-             type="text"
-             name="city"
-             id="city"
-             value="${person.city}"
-             />
+      <div class="input-group">
+        <input
+               class="form-control"
+               type="text"
+               name="city"
+               id="city"
+               v-model="city"
+               />
+
+        <span class="input-group-addon" :class="{'alert-danger': !isCityValid}">
+          <span class="glyphicon" :class="glyphicon(isCityValid)" aria-hidden="true"></span>
+        </span>
+      </div>
     </div>
   </div>
 
@@ -107,13 +131,19 @@
       State:
     </label>
     <div class="col-xs-12 col-sm-4 col-md-3">
-      <input
-             class="form-control"
-             type="text"
-             name="state"
-             id="state"
-             value="${person.state}"
-             />
+      <div class="input-group">
+        <input
+               class="form-control"
+               type="text"
+               name="state"
+               id="state"
+               v-model="state"
+               />
+
+        <span class="input-group-addon" :class="{'alert-danger': !isStateValid}">
+          <span class="glyphicon" :class="glyphicon(isStateValid)" aria-hidden="true"></span>
+        </span>
+      </div>
     </div>
   </div>
 
@@ -125,13 +155,19 @@
       Zip Code:
     </label>
     <div class="col-xs-12 col-sm-4 col-md-3">
-      <input
-             class="form-control"
-             type="text"
-             name="zipCode"
-             id="zipCode"
-             value="${person.zipCode}"
-             />
+      <div class="input-group">
+        <input
+               class="form-control"
+               type="text"
+               name="zipCode"
+               id="zipCode"
+               v-model="zipCode"
+               />
+
+        <span class="input-group-addon" :class="{'alert-danger': !isZipCodeValid}">
+          <span class="glyphicon" :class="glyphicon(isZipCodeValid)" aria-hidden="true"></span>
+        </span>
+      </div>
     </div>
   </div>
 
@@ -153,7 +189,7 @@
   <div class="row">
     <div class="col-xs-offset-6 col-sm-offset-8 col-md-offset-8">
       <a class="btn btn-warning" role="button" href="${pageContext.request.contextPath}/person/list">Cancel</a>
-      <input class="btn btn-primary" type="submit" name="Submit" value="Submit" :disabled="!isFormValid"/>
+      <input class="btn btn-primary" type="submit" name="Submit" value="Submit" :disabled="!isFormValid" />
     </div>
   </div>
 </div>
@@ -161,18 +197,57 @@
 <script>
 var app = new Vue({
 	el: '#person-form-app',
+
 	data: {
 		firstName: '${person.firstName}',
+		lastName: '${person.lastName}',
+		emailAddress: '${person.emailAddress}',
+		streetAddress: '${person.streetAddress}',
+		city: '${person.city}',
+		state: '${person.state}',
+		zipCode: '${person.zipCode}'
 	},
+
 	computed: {
 		isFirstNameValid: function () {
-			return this.firstName.length > 0;
+			return this.isLengthBetween(this.firstName, 1, 50)
+		},
+
+        isLastNameValid: function () {
+			return this.isLengthBetween(this.lastName, 1, 50)
+		},	
+
+		isEmailAddressValid: function () {
+			return this.isLengthBetween(this.emailAddress, 1, 50)
+		},
+		
+		isStreetAddressValid: function () {
+			return this.isLengthBetween(this.streetAddress, 1, 50)
+		},
+		
+		isCityValid: function () {
+			return this.isLengthBetween(this.city, 1, 50)
+		},
+		
+		isStateValid: function () {
+			return this.isLengthBetween(this.state, 2, 2)
+		},
+		
+		isZipCodeValid: function () {
+			return this.isLengthBetween(this.zipCode, 5, 5)
 		},
 		
 		isFormValid: function () {
-			return this.isFirstNameValid;
+			return this.isFirstNameValid
+			    && this.isLastNameValid
+			    && this.isEmailAddressValid
+			    && this.isStreetAddressValid
+			    && this.isCityValid
+			    && this.isStateValid
+			    && this.isZipCodeValid
 		}
 	},
+
 	methods: {
 	    glyphicon: function (isValid) {
           if (isValid) {
@@ -180,6 +255,10 @@ var app = new Vue({
           }
 
           return 'glyphicon-ban-circle'
+        },
+        
+        isLengthBetween: function (text, minimumLength, maximumLength) {
+        	return text.length >= minimumLength && text.length <= maximumLength;
         }
 	}
 })
