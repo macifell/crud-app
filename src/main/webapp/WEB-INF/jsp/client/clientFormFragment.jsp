@@ -21,7 +21,13 @@
                v-model="companyName"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isCompanyNameValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isCompanyNameValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="companyNameTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isCompanyNameValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -45,7 +51,13 @@
                v-model="websiteUri"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isWebsiteUriValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isWebsiteUriValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="websiteUriTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isWebsiteUriValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -69,7 +81,13 @@
                v-model="phoneNumber"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isPhoneNumberValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isPhoneNumberValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="phoneNumberTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isPhoneNumberValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -93,7 +111,13 @@
                v-model="mailingAddress"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isMailingAddressValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isMailingAddressValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="mailingAddressTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isMailingAddressValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -133,7 +157,12 @@ var app = new Vue({
         companyName: '${clientForm.client.companyName}',
         websiteUri: '${clientForm.client.websiteUri}',
         phoneNumber: '${clientForm.client.phoneNumber}',
-        mailingAddress: '${clientForm.client.mailingAddress}'
+        mailingAddress: '${clientForm.client.mailingAddress}',
+
+        companyNameError: 'Company name is required with a maximum length of 50',
+        websiteUriError: 'Website uri is required with a maximum length of 50',
+        phoneNumberError: 'Phone number is required in the following format: xxx-xxx-xxxx',
+        mailingAddressError: 'Mailing address is required with a maximum length of 50'
     },
 
     computed: {
@@ -158,6 +187,22 @@ var app = new Vue({
                 && this.isWebsiteUriValid
                 && this.isPhoneNumberValid
                 && this.isMailingAddressValid
+        },
+        
+        companyNameTooltip: function () {
+            return this.isCompanyNameValid ? '' : this.companyNameError
+        },
+
+        websiteUriTooltip: function () {
+            return this.isWebsiteUriValid ? '' : this.websiteUriError
+        },
+
+        phoneNumberTooltip: function () {
+            return this.isPhoneNumberValid ? '' : this.phoneNumberError
+        },
+
+        mailingAddressTooltip: function () {
+            return this.isMailingAddressValid ? '' : this.mailingAddressError
         }
     },
 

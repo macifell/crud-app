@@ -20,7 +20,13 @@
                v-model="firstName"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isFirstNameValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isFirstNameValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="firstNameTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isFirstNameValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -44,7 +50,13 @@
                v-model="lastName"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isLastNameValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isLastNameValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="lastNameTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isLastNameValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -68,7 +80,13 @@
                v-model="emailAddress"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isEmailAddressValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isEmailAddressValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="emailAddressTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isEmailAddressValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -92,7 +110,13 @@
                v-model="streetAddress"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isStreetAddressValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isStreetAddressValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="streetAddressTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isStreetAddressValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -116,7 +140,13 @@
                v-model="city"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isCityValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isCityValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="cityTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isCityValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -140,7 +170,13 @@
                v-model="state"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isStateValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isStateValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="stateTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isStateValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -164,7 +200,13 @@
                v-model="zipCode"
                />
 
-        <span class="input-group-addon" :class="{'alert-danger': !isZipCodeValid}">
+        <span
+              class="input-group-addon"
+              :class="{'alert-danger': !isZipCodeValid}"
+              data-toggle="tooltip"
+              data-container="body"
+              :data-original-title="zipCodeTooltip"
+              >
           <span class="glyphicon" :class="glyphicon(isZipCodeValid)" aria-hidden="true"></span>
         </span>
       </div>
@@ -205,14 +247,22 @@ var app = new Vue({
 		streetAddress: '${person.streetAddress}',
 		city: '${person.city}',
 		state: '${person.state}',
-		zipCode: '${person.zipCode}'
+		zipCode: '${person.zipCode}',
+
+		firstNameError: 'First name is required with a maximum length of 50',
+		lastNameError: 'Last name is required with a maximum length of 50',
+		emailAddressError: 'Email address is required with a maximum length of 50',
+		streetAddressError: 'Street address is required with a maximum length of 50',
+		cityError: 'City is required with a maximum length of 50',
+		stateError: 'State is required with a length of 2',
+		zipCodeError: 'Zip Code is required with a length of 5'
 	},
 
 	computed: {
 		isFirstNameValid: function () {
 			return this.isLengthBetween(this.firstName, 1, 50)
 		},
-
+		
         isLastNameValid: function () {
 			return this.isLengthBetween(this.lastName, 1, 50)
 		},	
@@ -245,6 +295,34 @@ var app = new Vue({
 			    && this.isCityValid
 			    && this.isStateValid
 			    && this.isZipCodeValid
+		},
+		
+        firstNameTooltip: function () {
+		    return this.isFirstNameValid ? '' : this.firstNameError
+		},
+
+        lastNameTooltip: function () {
+		    return this.isLastNameValid ? '' : this.lastNameError
+		},
+		
+        emailAddressTooltip: function () {
+		    return this.isEmailAddressValid ? '' : this.emailAddressError
+		},
+		
+        streetAddressTooltip: function () {
+		    return this.isStreetAddressValid ? '' : this.streetAddressError
+		},
+		
+        cityTooltip: function () {
+		    return this.isCityValid ? '' : this.cityError
+		},
+		
+        stateTooltip: function () {
+		    return this.isStateValid ? '' : this.stateError
+		},
+		
+        zipCodeTooltip: function () {
+		    return this.isZipCodeValid ? '' : this.zipCodeError
 		}
 	},
 
