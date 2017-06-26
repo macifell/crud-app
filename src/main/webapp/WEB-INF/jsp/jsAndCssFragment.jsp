@@ -12,3 +12,5 @@
       integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
       crossorigin="anonymous"
       >
+      
+<script src="https://unpkg.com/vue"></script>
