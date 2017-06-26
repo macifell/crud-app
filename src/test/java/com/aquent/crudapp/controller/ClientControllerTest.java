@@ -60,10 +60,7 @@ public class ClientControllerTest {
 
     private PersonDaoSpy deleteClientWithSpy(List<Person> contacts, List<Person> allPeople, Client client) {
         PersonDaoSpy spy = attachPersonDaoSpy(allPeople);
-        spy.setPeopleWithClient(contacts);
-
-        if (!contacts.isEmpty())
-            spy.setPersonToRead(contacts.get(0));
+        spy.setClientContacts(contacts);
 
         clientService.setClientDao(new ClientDaoDummy());
         clientController.delete(ClientController.COMMAND_DELETE, client.getClientId());

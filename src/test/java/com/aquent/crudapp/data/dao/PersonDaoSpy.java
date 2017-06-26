@@ -9,27 +9,21 @@ public class PersonDaoSpy extends PersonDaoDummy {
     private int updateCallCount;
     private List<Person> updatedPeople;
     private List<Person> allPeople;
-    private List<Person> peopleWithClient;
-    private Person personToRead;
+    private List<Person> clientContacts;
 
     public PersonDaoSpy() {
         this.updateCallCount = 0;
         this.updatedPeople = new ArrayList<>();
-        this.allPeople = null;
-        this.peopleWithClient = null;
-        this.personToRead = null;
+        this.allPeople = new ArrayList<>();
+        this.clientContacts = null;
     }
 
     public void setAllPeople(List<Person> allPeople) {
         this.allPeople = allPeople;
     }
 
-    public void setPeopleWithClient(List<Person> peopleWithClient) {
-        this.peopleWithClient = peopleWithClient;
-    }
-
-    public void setPersonToRead(Person personToRead) {
-        this.personToRead = personToRead;
+    public void setClientContacts(List<Person> clientContacts) {
+        this.clientContacts = clientContacts;
     }
 
     public int getUpdateCallCount() {
@@ -46,13 +40,19 @@ public class PersonDaoSpy extends PersonDaoDummy {
     }
 
     @Override
-    public Person readPerson(Integer id) {
-        return personToRead;
+    public Person readPerson(Integer personId) {
+        Person match = null;
+        
+        for (Person person : allPeople)
+            if (person.getPersonId() == personId)
+                match = person;
+        
+        return match;
     }
 
     @Override
     public List<Person> listClientContacts(Integer clientId) {
-        return peopleWithClient;
+        return clientContacts;
     }
 
     @Override
